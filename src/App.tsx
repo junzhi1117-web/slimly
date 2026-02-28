@@ -1,40 +1,44 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { HomePage } from './pages/HomePage'
 import { LogPage } from './pages/LogPage'
 import { WeightPage } from './pages/WeightPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { OnboardingPage } from './pages/OnboardingPage'
 import { BottomNav } from './components/layout/BottomNav'
 import { Header } from './components/layout/Header'
 import { useLocalStorage } from './lib/supabase'
-import type { InjectionLog, WeightLog, UserProfile } from './types'
+import { useAuth, useProfile, useDoseRecords, useWeightLogs, migrateLegacyData, syncLocalToSupabase } from './lib/db'
+import type { UserProfile } from './types'
+
+// Migrate old injection_logs → dose_records on first load
+migrateLegacyData()
 
 function App() {
   const [activeTab, setActiveTab] = useState('home')
-  
-  const [profile, setProfile] = useLocalStorage<UserProfile>('slimly_profile', {
-    medicationType: 'mounjaro',
-    currentDose: 2.5,
-    startDate: new Date().toISOString().split('T')[0],
-    startWeight: 80,
-    targetWeight: 70,
-    height: 175
-  })
+  const [onboarded, setOnboarded] = useLocalStorage('slimly_onboarded', false)
 
-  const [injectionLogs, setInjectionLogs] = useLocalStorage<InjectionLog[]>('slimly_injection_logs', [])
-  const [weightLogs, setWeightLogs] = useLocalStorage<WeightLog[]>('slimly_weight_logs', [])
+  const { user } = useAuth()
+  const [refreshKey, setRefreshKey] = useState(0)
 
-  const handleAddInjection = (log: Omit<InjectionLog, 'id'>) => {
-    const newLog = { ...log, id: crypto.randomUUID() }
-    setInjectionLogs([newLog, ...injectionLogs])
-  }
+  const { profile, updateProfile } = useProfile(user, refreshKey)
+  const { records: doseRecords, addRecord } = useDoseRecords(user, refreshKey)
+  const { logs: weightLogs, addLog: addWeightLog } = useWeightLogs(user, refreshKey)
 
-  const handleAddWeight = (log: Omit<WeightLog, 'id'>) => {
-    const newLog = { ...log, id: crypto.randomUUID() }
-    setWeightLogs([newLog, ...weightLogs])
-  }
+  const handleOnboardingComplete = useCallback((newProfile: UserProfile) => {
+    updateProfile(newProfile)
+    setOnboarded(true)
+  }, [updateProfile, setOnboarded])
 
-  const handleUpdateProfile = (updates: Partial<UserProfile>) => {
-    setProfile({ ...profile, ...updates })
+  const handleLoginSync = useCallback(async () => {
+    const currentUser = user
+    if (currentUser) {
+      await syncLocalToSupabase(currentUser.id)
+      setRefreshKey(k => k + 1)
+    }
+  }, [user])
+
+  if (!onboarded) {
+    return <OnboardingPage onComplete={handleOnboardingComplete} />
   }
 
   const renderPage = () => {
@@ -42,36 +46,38 @@ function App() {
       case 'home':
         return (
           <div className="p-4">
-            <Header title="纖記 Slimly" />
-            <HomePage 
-              profile={profile} 
-              injectionLogs={injectionLogs} 
-              weightLogs={weightLogs} 
+            <Header title="纖記" />
+            <HomePage
+              profile={profile}
+              doseRecords={doseRecords}
+              weightLogs={weightLogs}
               onAction={setActiveTab}
             />
           </div>
         )
       case 'log':
         return (
-          <LogPage 
-            logs={injectionLogs} 
-            profile={profile} 
-            onAddLog={handleAddInjection} 
+          <LogPage
+            logs={doseRecords}
+            profile={profile}
+            onAddLog={addRecord}
           />
         )
       case 'weight':
         return (
-          <WeightPage 
-            logs={weightLogs} 
-            profile={profile} 
-            onAddLog={handleAddWeight} 
+          <WeightPage
+            logs={weightLogs}
+            profile={profile}
+            onAddLog={addWeightLog}
           />
         )
       case 'profile':
         return (
-          <ProfilePage 
-            profile={profile} 
-            onUpdateProfile={handleUpdateProfile} 
+          <ProfilePage
+            profile={profile}
+            onUpdateProfile={updateProfile}
+            user={user}
+            onLoginSync={handleLoginSync}
           />
         )
       default:

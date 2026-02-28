@@ -1,13 +1,16 @@
 export type MedicationType = 'mounjaro' | 'wegovy' | 'saxenda'
 
+export type MedicationRoute = 'injection' | 'oral'
+
 export interface Medication {
-  id: MedicationType
-  name: string          // 猛健樂
-  brandName: string     // Mounjaro
-  manufacturer: string  // 台灣禮來
-  doses: number[]       // [2.5, 5, 7.5, 10, 12.5, 15]
-  frequency: 'weekly' | 'daily'
-  unit: 'mg'
+  id: string
+  name: string
+  brandName: string
+  manufacturer: string
+  doses: number[]
+  frequency: 'weekly' | 'daily' | 'custom'
+  unit: string
+  route: MedicationRoute
 }
 
 export type InjectionSite = 'abdomen-left' | 'abdomen-right' | 'thigh-left' | 'thigh-right' | 'arm-left' | 'arm-right'
@@ -19,9 +22,21 @@ export interface SideEffectEntry {
   severity: 1 | 2 | 3   // 輕微/中等/嚴重
 }
 
+export interface DoseRecord {
+  id: string
+  date: string
+  medication: string
+  dose: number
+  route: MedicationRoute
+  injectionSite?: InjectionSite
+  withMeal?: boolean
+  notes?: string
+  sideEffects?: SideEffectEntry[]
+}
+
 export interface InjectionLog {
   id: string
-  date: string          // ISO date
+  date: string
   medication: MedicationType
   dose: number
   site: InjectionSite
@@ -39,6 +54,7 @@ export interface WeightLog {
 export interface UserProfile {
   medicationType: MedicationType
   currentDose: number
+  injectionDay?: number  // 0=Sun..6=Sat
   startDate: string
   startWeight: number
   targetWeight?: number

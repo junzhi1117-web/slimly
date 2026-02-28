@@ -9,6 +9,7 @@ export const MEDICATIONS: Record<MedicationType, Medication> = {
     doses: [2.5, 5, 7.5, 10, 12.5, 15],
     frequency: 'weekly',
     unit: 'mg',
+    route: 'injection',
   },
   wegovy: {
     id: 'wegovy',
@@ -18,6 +19,7 @@ export const MEDICATIONS: Record<MedicationType, Medication> = {
     doses: [0.25, 0.5, 1.0, 1.7, 2.4],
     frequency: 'weekly',
     unit: 'mg',
+    route: 'injection',
   },
   saxenda: {
     id: 'saxenda',
@@ -27,6 +29,7 @@ export const MEDICATIONS: Record<MedicationType, Medication> = {
     doses: [0.6, 1.2, 1.8, 2.4, 3.0],
     frequency: 'daily',
     unit: 'mg',
+    route: 'injection',
   },
 }
 
@@ -49,3 +52,5 @@ export const INJECTION_SITE_LABELS: Record<InjectionSite, string> = {
   'arm-left': '上臂左側',
   'arm-right': '上臂右側',
 }
+
+export const WEEKDAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'] as const

@@ -1,4 +1,5 @@
 import React from 'react'
+import { ChevronLeft } from 'lucide-react'
 
 interface HeaderProps {
   title: string
@@ -8,15 +9,13 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ title, showBack, onBack }) => {
   return (
-    <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-[var(--color-border)] px-4 py-3 flex items-center h-14">
+    <header className="sticky top-0 z-10 bg-[var(--color-bg)]/80 backdrop-blur-md border-b border-[var(--color-border)]/50 px-4 flex items-center h-16">
       {showBack && (
-        <button onClick={onBack} className="mr-2 p-1">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+        <button onClick={onBack} className="mr-2 p-1 text-[var(--color-deep)]">
+          <ChevronLeft size={24} />
         </button>
       )}
-      <h1 className="text-xl font-bold text-[var(--color-primary)]">{title}</h1>
+      <h1 className="text-xl font-serif italic text-[var(--color-deep)]">{title}</h1>
     </header>
   )
 }

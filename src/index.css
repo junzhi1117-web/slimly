@@ -1,31 +1,100 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2D9B8A;
-  --color-primary-dark: #1E7A6B;
-  --color-primary-light: #E8F7F4;
-  --color-accent: #F4845F;
-  --color-accent-dark: #E06540;
-  --color-bg: #F8FAFA;
+  --color-bg: #F8F5F0;
   --color-surface: #FFFFFF;
-  --color-text: #1A2E2B;
-  --color-text-muted: #6B8F8A;
-  --color-border: #D8EEEB;
-  
+  --color-sage: #8FBCB0;
+  --color-sage-light: rgba(143, 188, 176, 0.12);
+  --color-rose: #C9A0A8;
+  --color-rose-light: rgba(201, 160, 168, 0.12);
+  --color-gold: #E8D5B8;
+  --color-gold-light: rgba(232, 213, 184, 0.15);
+  --color-deep: #5C7A74;
+  --color-muted: #9BB5B0;
+  --color-border: rgba(143, 188, 176, 0.2);
+
   --font-sans: "Noto Sans TC", sans-serif;
-  --font-lexend: "Lexend", sans-serif;
+  --font-serif: "Cormorant Garamond", "Noto Serif TC", serif;
 }
 
 :root {
   background-color: var(--color-bg);
-  color: var(--color-text);
+  color: var(--color-deep);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, .font-lexend {
-  font-family: var(--font-lexend), var(--font-sans);
+h1, h2, h3, .font-serif {
+  font-family: var(--font-serif), var(--font-sans);
 }
 
-input, button {
+input, button, select, textarea {
   font-family: inherit;
+}
+
+/* ── Card variants ─────────────────────── */
+
+.card-monet {
+  background: var(--color-surface);
+  border-radius: 20px;
+  box-shadow:
+    0 2px 16px rgba(92, 122, 116, 0.08),
+    0 1px 4px rgba(92, 122, 116, 0.04);
+}
+
+.card-sage {
+  background: var(--color-sage-light);
+  border: 1px solid rgba(143, 188, 176, 0.3);
+  border-radius: 20px;
+}
+
+.card-rose {
+  background: var(--color-rose-light);
+  border: 1px solid rgba(201, 160, 168, 0.3);
+  border-radius: 20px;
+}
+
+.card-hero {
+  background: #5C7A74;
+  color: white;
+  border-radius: 20px;
+  box-shadow:
+    0 4px 24px rgba(92, 122, 116, 0.25),
+    0 2px 8px rgba(92, 122, 116, 0.12);
+}
+
+/* ── Input styling ─────────────────────── */
+
+.input-monet {
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-monet:focus {
+  border-color: var(--color-sage);
+  box-shadow: 0 0 0 3px rgba(143, 188, 176, 0.15);
+}
+
+/* ── Typography utilities ──────────────── */
+
+.stat-number {
+  font-family: var(--font-serif), var(--font-sans);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+/* ── Animations ──────────────────────── */
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
 }

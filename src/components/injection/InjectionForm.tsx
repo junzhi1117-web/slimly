@@ -1,20 +1,29 @@
 import React, { useState } from 'react'
-import type { MedicationType, InjectionSite, SideEffectType, InjectionLog, SideEffectEntry } from '../../types'
+import type { MedicationType, InjectionSite, SideEffectType, DoseRecord, SideEffectEntry } from '../../types'
 import { MEDICATIONS, INJECTION_SITE_LABELS, SIDE_EFFECT_LABELS } from '../../lib/medications'
 import { Button } from '../ui/Button'
 import { Check } from 'lucide-react'
 
+const SITE_EMOJI: Record<InjectionSite, string> = {
+  'abdomen-left': '🫃←',
+  'abdomen-right': '🫃→',
+  'thigh-left': '🦵←',
+  'thigh-right': '🦵→',
+  'arm-left': '💪←',
+  'arm-right': '💪→',
+}
+
 interface InjectionFormProps {
   medicationType: MedicationType
-  onSave: (log: Omit<InjectionLog, 'id'>) => void
+  onSave: (log: Omit<DoseRecord, 'id'>) => void
   onCancel: () => void
   suggestedSite?: InjectionSite
   currentDose: number
 }
 
-export const InjectionForm: React.FC<InjectionFormProps> = ({ 
-  medicationType, 
-  onSave, 
+export const InjectionForm: React.FC<InjectionFormProps> = ({
+  medicationType,
+  onSave,
   onCancel,
   suggestedSite = 'abdomen-left',
   currentDose
@@ -33,7 +42,7 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
       if (exists) {
         return prev.filter(se => se.type !== type)
       } else {
-        return [...prev, { type, severity: 1 }]
+        return [...prev, { type, severity: 1 as const }]
       }
     })
   }
@@ -48,7 +57,8 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
       date,
       medication: medicationType,
       dose,
-      site,
+      route: med.route,
+      injectionSite: site,
       notes,
       sideEffects: selectedSideEffects
     })
@@ -58,27 +68,27 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
     <form onSubmit={handleSubmit} className="space-y-6 pb-20">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-1">注射日期</label>
-          <input 
-            type="date" 
-            value={date} 
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">注射日期</label>
+          <input
+            type="date"
+            value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full bg-white border border-[var(--color-border)] rounded-xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-primary)] outline-none"
+            className="input-monet"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-2">劑量 ({med.unit})</label>
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">劑量 ({med.unit})</label>
           <div className="grid grid-cols-3 gap-2">
             {med.doses.map(d => (
               <button
                 key={d}
                 type="button"
                 onClick={() => setDose(d)}
-                className={`py-2 rounded-xl border transition-all ${
-                  dose === d 
-                    ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]' 
-                    : 'bg-white border-[var(--color-border)] text-[var(--color-text)]'
+                className={`py-2.5 rounded-full border font-medium text-sm transition-all ${
+                  dose === d
+                    ? 'bg-[var(--color-sage)] text-white border-[var(--color-sage)] shadow-sm'
+                    : 'bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-deep)] hover:border-[var(--color-sage)]'
                 }`}
               >
                 {d}
@@ -88,28 +98,29 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-2">注射部位</label>
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">注射部位</label>
           <div className="grid grid-cols-2 gap-2">
             {(Object.keys(INJECTION_SITE_LABELS) as InjectionSite[]).map(s => (
               <button
                 key={s}
                 type="button"
                 onClick={() => setSite(s)}
-                className={`py-3 px-2 rounded-xl border text-sm flex items-center justify-between ${
-                  site === s 
-                    ? 'bg-[var(--color-primary-light)] border-[var(--color-primary)] text-[var(--color-primary)]' 
-                    : 'bg-white border-[var(--color-border)] text-[var(--color-text)]'
+                className={`py-3 px-3 rounded-2xl border text-sm flex items-center gap-2 transition-all ${
+                  site === s
+                    ? 'bg-[var(--color-sage-light)] border-[var(--color-sage)] text-[var(--color-deep)]'
+                    : 'bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-deep)] hover:border-[var(--color-sage)]'
                 }`}
               >
-                {INJECTION_SITE_LABELS[s]}
-                {site === s && <Check size={16} />}
+                <span className="text-base">{SITE_EMOJI[s]}</span>
+                <span className="flex-1 text-left">{INJECTION_SITE_LABELS[s]}</span>
+                {site === s && <Check size={16} className="text-[var(--color-sage)]" />}
               </button>
             ))}
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-2">副作用記錄</label>
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">副作用記錄</label>
           <div className="flex flex-wrap gap-2 mb-3">
             {(Object.keys(SIDE_EFFECT_LABELS) as SideEffectType[]).map(type => {
               const isSelected = selectedSideEffects.some(se => se.type === type)
@@ -118,10 +129,10 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
                   key={type}
                   type="button"
                   onClick={() => toggleSideEffect(type)}
-                  className={`px-3 py-1.5 rounded-full text-sm border transition-all ${
-                    isSelected 
-                      ? 'bg-[var(--color-accent)] text-white border-[var(--color-accent)]' 
-                      : 'bg-white border-[var(--color-border)] text-[var(--color-text-muted)]'
+                  className={`px-3.5 py-1.5 rounded-full text-sm border transition-all ${
+                    isSelected
+                      ? 'bg-[var(--color-rose-light)] text-[var(--color-rose)] border-[var(--color-rose)] font-medium'
+                      : 'bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-rose)]'
                   }`}
                 >
                   {SIDE_EFFECT_LABELS[type]}
@@ -129,22 +140,22 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
               )
             })}
           </div>
-          
+
           {selectedSideEffects.length > 0 && (
             <div className="space-y-3 mt-4">
               {selectedSideEffects.map(se => (
-                <div key={se.type} className="flex items-center justify-between bg-white p-3 rounded-xl border border-[var(--color-border)]">
+                <div key={se.type} className="flex items-center justify-between card-rose p-3">
                   <span className="text-sm font-medium">{SIDE_EFFECT_LABELS[se.type]}</span>
                   <div className="flex gap-1">
-                    {[1, 2, 3].map(level => (
+                    {([1, 2, 3] as const).map(level => (
                       <button
                         key={level}
                         type="button"
-                        onClick={() => updateSeverity(se.type, level as 1|2|3)}
-                        className={`w-8 h-8 rounded-lg text-xs flex items-center justify-center transition-all ${
-                          se.severity === level 
-                            ? 'bg-[var(--color-accent)] text-white' 
-                            : 'bg-gray-100 text-gray-400'
+                        onClick={() => updateSeverity(se.type, level)}
+                        className={`w-8 h-8 rounded-xl text-xs flex items-center justify-center transition-all ${
+                          se.severity === level
+                            ? 'bg-[var(--color-rose)] text-white'
+                            : 'bg-[var(--color-bg)] text-[var(--color-muted)]'
                         }`}
                       >
                         {level === 1 ? '輕' : level === 2 ? '中' : '重'}
@@ -158,12 +169,12 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-1">備註</label>
-          <textarea 
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">備註</label>
+          <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="記錄心情或特別狀況..."
-            className="w-full bg-white border border-[var(--color-border)] rounded-xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-primary)] outline-none h-24 resize-none"
+            className="input-monet h-24 resize-none"
           />
         </div>
       </div>

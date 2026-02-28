@@ -4,12 +4,20 @@ interface CardProps {
   children: React.ReactNode
   className?: string
   onClick?: () => void
+  variant?: 'default' | 'sage' | 'rose' | 'hero'
 }
 
-export const Card: React.FC<CardProps> = ({ children, className = '', onClick }) => {
+const variantClasses = {
+  default: 'card-monet',
+  sage: 'card-sage',
+  rose: 'card-rose',
+  hero: 'card-hero',
+}
+
+export const Card: React.FC<CardProps> = ({ children, className = '', onClick, variant = 'default' }) => {
   return (
-    <div 
-      className={`bg-white rounded-2xl p-4 shadow-sm border border-[var(--color-border)] ${className}`}
+    <div
+      className={`${variantClasses[variant]} p-4 ${className}`}
       onClick={onClick}
     >
       {children}

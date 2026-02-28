@@ -27,37 +27,37 @@ export const WeightForm: React.FC<WeightFormProps> = ({ onSave, onCancel, initia
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-1">記錄日期</label>
-          <input 
-            type="date" 
-            value={date} 
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">記錄日期</label>
+          <input
+            type="date"
+            value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full bg-white border border-[var(--color-border)] rounded-xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-primary)] outline-none"
+            className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-sage)] outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-1">體重 (kg)</label>
-          <input 
-            type="number" 
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">體重 (kg)</label>
+          <input
+            type="number"
             step="0.1"
-            value={weight} 
+            value={weight}
             onChange={(e) => setWeight(e.target.value)}
             placeholder="0.0"
-            className="w-full bg-white border border-[var(--color-border)] rounded-xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-primary)] outline-none text-2xl font-bold"
+            className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-sage)] outline-none text-2xl font-semibold"
             autoFocus
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-1">腰圍 (cm，選填)</label>
-          <input 
-            type="number" 
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">腰圍 (cm，選填)</label>
+          <input
+            type="number"
             step="0.1"
-            value={waist} 
+            value={waist}
             onChange={(e) => setWaist(e.target.value)}
             placeholder="0.0"
-            className="w-full bg-white border border-[var(--color-border)] rounded-xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-primary)] outline-none"
+            className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-sage)] outline-none"
           />
         </div>
       </div>
