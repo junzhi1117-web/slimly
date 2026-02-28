@@ -101,7 +101,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] flex flex-col">
+    <div className="min-h-screen bg-[var(--color-bg)] flex flex-col overflow-hidden">
       {/* Progress bar */}
       <div className="px-6 pt-[env(safe-area-inset-top)] mt-4">
         <div className="flex gap-2">
@@ -117,13 +117,13 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
       </div>
 
       {/* Content area with slide animation */}
-      <div className="flex-1 px-6 py-8 overflow-hidden">
+      <div className="flex-1 py-8 overflow-hidden">
         <div
-          className="flex transition-transform duration-300 ease-out"
-          style={{ transform: `translateX(-${step * 100}%)`, width: '400%' }}
+          className="flex transition-transform duration-300 ease-out h-full"
+          style={{ transform: `translateX(calc(-${step} * 100vw))`, width: '400vw' }}
         >
           {/* Step 1 — 選藥物 */}
-          <div className="w-full shrink-0 px-0.5">
+          <div className="w-screen shrink-0 px-6 overflow-y-auto">
             <h1 className="text-2xl font-serif italic text-[var(--color-deep)] mb-2">
               你使用哪種藥物？
             </h1>
@@ -167,7 +167,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           </div>
 
           {/* Step 2 — 劑量與時間 */}
-          <div className="w-full shrink-0 px-0.5">
+          <div className="w-screen shrink-0 px-6 overflow-y-auto">
             <h1 className="text-2xl font-serif italic text-[var(--color-deep)] mb-2">
               設定你的劑量與時間
             </h1>
@@ -205,13 +205,13 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
                   {med.frequency === 'weekly' ? '每週注射日' : '注射頻率'}
                 </label>
                 {med.frequency === 'weekly' ? (
-                  <div className="flex gap-2">
+                  <div className="grid grid-cols-7 gap-1.5">
                     {WEEKDAY_LABELS.map((label, i) => (
                       <button
                         key={i}
                         type="button"
                         onClick={() => setInjectionDay(i)}
-                        className={`w-10 h-10 rounded-full text-sm transition-all ${
+                        className={`aspect-square rounded-full text-sm transition-all flex items-center justify-center ${
                           injectionDay === i
                             ? 'bg-[var(--color-sage)] text-white'
                             : 'bg-[var(--color-surface)] border border-[var(--color-border)]'
@@ -244,7 +244,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           </div>
 
           {/* Step 3 — 體重目標 */}
-          <div className="w-full shrink-0 px-0.5">
+          <div className="w-screen shrink-0 px-6 overflow-y-auto">
             <h1 className="text-2xl font-serif italic text-[var(--color-deep)] mb-2">
               設定你的體重目標
             </h1>
@@ -298,7 +298,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           </div>
 
           {/* Step 4 — 建立帳號 */}
-          <div className="w-full shrink-0 px-0.5">
+          <div className="w-screen shrink-0 px-6 overflow-y-auto">
             <h1 className="text-2xl font-serif italic text-[var(--color-deep)] mb-2">
               建立帳號，安全保存
             </h1>
@@ -372,7 +372,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
       </div>
 
       {/* Bottom navigation */}
-      <div className="px-6 pb-8 pb-[max(2rem,env(safe-area-inset-bottom))] flex gap-3">
+      <div className="px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-4 flex gap-3 bg-[var(--color-bg)]">
         {step > 0 && (
           <Button variant="ghost" onClick={prev} className="px-4">
             <ChevronLeft size={20} />
