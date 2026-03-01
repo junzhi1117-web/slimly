@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { HomePage } from './pages/HomePage'
 import { LogPage } from './pages/LogPage'
 import { WeightPage } from './pages/WeightPage'
@@ -7,6 +7,7 @@ import { OnboardingPage } from './pages/OnboardingPage'
 import { BottomNav } from './components/layout/BottomNav'
 import { Header } from './components/layout/Header'
 import { useLocalStorage } from './lib/supabase'
+import { supabase } from './lib/supabase'
 import { useAuth, useProfile, useDoseRecords, useWeightLogs, migrateLegacyData, syncLocalToSupabase } from './lib/db'
 import type { UserProfile } from './types'
 
@@ -23,6 +24,28 @@ function App() {
   const { profile, updateProfile } = useProfile(user, refreshKey)
   const { records: doseRecords, addRecord } = useDoseRecords(user, refreshKey)
   const { logs: weightLogs, addLog: addWeightLog } = useWeightLogs(user, refreshKey)
+
+  // Handle OAuth callback: if user signed in via Google and has a profile, auto-complete onboarding
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user && !onboarded) {
+        // Check if this user already has a profile in Supabase
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
+
+        if (existingProfile && existingProfile.start_weight) {
+          // Returning user — mark onboarded and skip onboarding
+          setOnboarded(true)
+          setRefreshKey(k => k + 1)
+        }
+        // If no complete profile, they'll continue onboarding (step 4 handler will save it)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [onboarded, setOnboarded])
 
   const handleOnboardingComplete = useCallback((newProfile: UserProfile) => {
     updateProfile(newProfile)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { MEDICATIONS, WEEKDAY_LABELS } from '../lib/medications'
@@ -13,6 +13,25 @@ interface OnboardingPageProps {
 
 export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) => {
   const [step, setStep] = useState(0)
+
+  // If user returns from Google OAuth during onboarding, jump to step 4 (account step)
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user && step < 3) {
+        // Check if they have a complete profile already (returning user handled in App.tsx)
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('start_weight')
+          .eq('id', session.user.id)
+          .single()
+        if (!existingProfile?.start_weight) {
+          // New user via Google — jump to step 3 (body stats) if not there yet
+          setStep(prev => prev < 2 ? 2 : prev)
+        }
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [step])
 
   // Step 1 state
   const [medType, setMedType] = useState<MedicationType>('mounjaro')
