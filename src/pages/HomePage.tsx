@@ -2,6 +2,7 @@ import React from 'react'
 import { Card } from '../components/ui/Card'
 import { Badge } from '../components/ui/Badge'
 import { WeightChart } from '../components/weight/WeightChart'
+import { SideEffectInsightCard } from '../components/insight/SideEffectInsightCard'
 import type { DoseRecord, WeightLog, UserProfile } from '../types'
 import { MEDICATIONS, INJECTION_SITE_LABELS } from '../lib/medications'
 import { Syringe, TrendingDown, Calendar, ChevronRight } from 'lucide-react'
@@ -124,6 +125,14 @@ export const HomePage: React.FC<HomePageProps> = ({ profile, doseRecords, weight
           )}
         </Card>
       </section>
+
+      {/* Side Effect Insight */}
+      {doseRecords.length >= 1 && (
+        <section>
+          <h3 className="font-serif text-lg text-[var(--color-deep)] mb-3">副作用適應</h3>
+          <SideEffectInsightCard doseRecords={doseRecords} />
+        </section>
+      )}
 
       {/* Last Injection Preview */}
       <section>
