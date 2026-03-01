@@ -1,0 +1,30 @@
+<!-- Shared CSS template reference for articles -->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans TC', 'PingFang TC', sans-serif; background: #F8F5F0; color: #3D5450; line-height: 1.8; }
+  .container { max-width: 720px; margin: 0 auto; padding: 0 1.25rem 4rem; }
+  header { background: #5C7A74; color: white; padding: 1rem 1.25rem; position: sticky; top: 0; z-index: 10; }
+  header a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: 600; }
+  .hero { background: linear-gradient(135deg, #5C7A74, #8FBCB0); color: white; padding: 3rem 1.25rem 2rem; text-align: center; }
+  .hero h1 { font-size: 1.75rem; font-weight: 700; line-height: 1.4; margin-bottom: 0.75rem; }
+  .hero .meta { font-size: 0.85rem; opacity: 0.8; }
+  article { background: white; border-radius: 20px; margin: 1.5rem 0; padding: 2rem 1.5rem; box-shadow: 0 2px 16px rgba(92,122,116,.08); }
+  h2 { font-size: 1.3rem; color: #5C7A74; margin: 2rem 0 1rem; border-left: 4px solid #8FBCB0; padding-left: 0.75rem; }
+  h3 { font-size: 1.1rem; color: #5C7A74; margin: 1.5rem 0 0.5rem; }
+  p { margin-bottom: 1rem; color: #4A6560; }
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  li { margin-bottom: 0.4rem; color: #4A6560; }
+  .tip-box { background: rgba(143,188,176,.12); border: 1px solid rgba(143,188,176,.4); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+  .tip-box .label { font-weight: 700; color: #5C7A74; margin-bottom: 0.25rem; }
+  .warning-box { background: rgba(201,160,168,.12); border: 1px solid rgba(201,160,168,.4); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+  .warning-box .label { font-weight: 700; color: #9B6B73; margin-bottom: 0.25rem; }
+  .drug-badge { display: inline-block; background: #8FBCB0; color: white; padding: 3px 12px; border-radius: 20px; font-size: 0.8rem; margin: 2px; }
+  .cta { background: #5C7A74; color: white; border-radius: 16px; padding: 1.5rem; text-align: center; margin: 2rem 0; }
+  .cta h3 { color: white; font-size: 1.15rem; margin-bottom: 0.5rem; }
+  .cta p { color: rgba(255,255,255,.85); margin-bottom: 1rem; font-size: 0.9rem; }
+  .cta a { display: inline-block; background: white; color: #5C7A74; font-weight: 700; padding: 0.75rem 2rem; border-radius: 50px; text-decoration: none; font-size: 1rem; }
+  .related { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+  .related a { display: block; background: #F8F5F0; border-radius: 12px; padding: 0.75rem; text-decoration: none; color: #5C7A74; font-size: 0.9rem; border: 1px solid rgba(143,188,176,.3); }
+  footer { text-align: center; padding: 2rem 1.25rem; color: #9BB5B0; font-size: 0.8rem; }
+  @media (max-width: 480px) { .hero h1 { font-size: 1.4rem; } .related { grid-template-columns: 1fr; } article { padding: 1.25rem 1rem; } }
+</style>

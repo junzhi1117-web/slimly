@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使用猛健樂、週纖達期間的飲食指南：吃什麼最有效？｜纖記</title>
+  <meta name="description" content="使用 GLP-1 減重藥期間的飲食建議：如何搭配飲食加速減重？哪些食物讓副作用更嚴重？醫師完整說明。">
+  <meta name="keywords" content="猛健樂飲食,週纖達飲食,GLP-1飲食建議,減重藥飲食,減重藥副作用飲食,tirzepatide飲食,減重期間吃什麼,減肥飲食">
+  <link rel="canonical" href="https://slimly.vercel.app/articles/diet-guide.html">
+  <meta property="og:title" content="使用猛健樂、週纖達期間的飲食指南">
+  <meta property="og:description" content="GLP-1 減重藥期間的飲食建議，搭配正確飲食讓效果最大化。">
+  <meta property="og:url" content="https://slimly.vercel.app/articles/diet-guide.html">
+  <meta property="og:image" content="https://slimly.vercel.app/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans TC', 'PingFang TC', sans-serif; background: #F8F5F0; color: #3D5450; line-height: 1.8; }
+    .top-bar { background: #5C7A74; color: white; padding: 0.875rem 1.25rem; display: flex; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .top-bar a { color: white; text-decoration: none; font-weight: 600; font-size: 1rem; }
+    .top-bar span { opacity: 0.6; font-size: 0.85rem; margin-left: 0.5rem; }
+    .hero { background: #5C7A74; color: white; padding: 2.5rem 1.25rem 3rem; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,.2); padding: 3px 12px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .hero h1 { font-size: 1.65rem; font-weight: 700; line-height: 1.45; margin-bottom: 0.75rem; }
+    .hero .meta { font-size: 0.82rem; opacity: 0.75; }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 1rem 5rem; }
+    .card { background: white; border-radius: 20px; margin: 1.25rem 0; padding: 1.75rem 1.5rem; box-shadow: 0 2px 16px rgba(92,122,116,.07); }
+    h2 { font-size: 1.25rem; color: #5C7A74; margin: 0 0 1rem; padding-left: 0.75rem; border-left: 4px solid #8FBCB0; }
+    h3 { font-size: 1.05rem; color: #5C7A74; margin: 1.25rem 0 0.5rem; font-weight: 700; }
+    p { color: #4A6560; margin-bottom: 0.875rem; font-size: 0.97rem; }
+    ul { padding-left: 1.4rem; margin-bottom: 0.875rem; }
+    li { color: #4A6560; margin-bottom: 0.35rem; font-size: 0.97rem; }
+    .food-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+    .food-card { border-radius: 14px; padding: 1rem; }
+    .food-card.good { background: rgba(143,188,176,.1); border: 1.5px solid rgba(143,188,176,.3); }
+    .food-card.bad { background: rgba(201,160,168,.1); border: 1.5px solid rgba(201,160,168,.3); }
+    .food-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .food-card.good h4 { color: #5C7A74; }
+    .food-card.bad h4 { color: #9B6B73; }
+    .food-card ul { padding-left: 1.2rem; margin: 0; }
+    .food-card li { font-size: 0.88rem; }
+    .meal-plan { background: #F8F5F0; border-radius: 16px; padding: 1.25rem; margin: 1rem 0; }
+    .meal-plan h4 { color: #5C7A74; font-weight: 700; margin-bottom: 0.75rem; }
+    .meal-row { display: flex; gap: 0.75rem; margin-bottom: 0.5rem; align-items: flex-start; }
+    .meal-time { background: #8FBCB0; color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.78rem; white-space: nowrap; flex-shrink: 0; margin-top: 3px; }
+    .meal-content { font-size: 0.9rem; color: #4A6560; }
+    .tip { background: rgba(143,188,176,.12); border: 1px solid rgba(143,188,176,.35); border-radius: 12px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .tip-label { font-weight: 700; color: #5C7A74; font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .warn { background: rgba(201,160,168,.12); border: 1px solid rgba(201,160,168,.35); border-radius: 12px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .warn-label { font-weight: 700; color: #9B6B73; font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .cta-box { background: #5C7A74; color: white; border-radius: 20px; padding: 1.75rem 1.5rem; text-align: center; margin: 1.5rem 0; }
+    .cta-box h3 { color: white; font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .cta-box p { color: rgba(255,255,255,.82); font-size: 0.9rem; margin-bottom: 1rem; }
+    .cta-box a { display: inline-block; background: white; color: #5C7A74; font-weight: 700; padding: 0.75rem 2rem; border-radius: 50px; text-decoration: none; font-size: 0.95rem; }
+    .related { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .related a { display: block; background: #F8F5F0; border-radius: 12px; padding: 0.875rem; text-decoration: none; color: #5C7A74; font-size: 0.88rem; border: 1px solid rgba(143,188,176,.25); line-height: 1.5; }
+    footer { text-align: center; padding: 2rem 1rem; color: #9BB5B0; font-size: 0.78rem; }
+    @media (max-width: 500px) { .hero h1 { font-size: 1.35rem; } .food-grid { grid-template-columns: 1fr; } .related { grid-template-columns: 1fr; } .card { padding: 1.25rem 1rem; } }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="https://slimly.vercel.app">🌿 纖記 Slimly</a>
+  <span>/ 衛教文章</span>
+</div>
+
+<div class="hero">
+  <div style="max-width:720px;margin:0 auto;">
+    <div class="tag">飲食管理</div>
+    <h1>使用猛健樂、週纖達期間的<br>飲食完整指南</h1>
+    <div class="meta">👨‍⚕️ 王俊智醫師 · 家庭醫學科 · 2026年3月</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <p>GLP-1 減重藥本身就會降低食慾，讓你自然吃得更少。但「吃什麼」和「怎麼吃」仍然非常重要——正確的飲食搭配可以讓效果最大化、副作用最小化，並且保護你在藥物作用下不流失肌肉。</p>
+  </div>
+
+  <div class="card">
+    <h2>最重要的飲食原則：蛋白質優先</h2>
+    <p>使用 GLP-1 減重藥時，食慾下降，整體攝入熱量減少。這時候最大的風險是<strong>肌肉流失</strong>。肌肉不只關係到體能，也是你維持基礎代謝率的關鍵。</p>
+    <p><strong>每天的蛋白質目標</strong>：每公斤體重 1.2–1.5g</p>
+    <ul>
+      <li>60kg → 每天 72–90g 蛋白質</li>
+      <li>75kg → 每天 90–113g 蛋白質</li>
+      <li>90kg → 每天 108–135g 蛋白質</li>
+    </ul>
+    <div class="tip">
+      <div class="tip-label">🥩 高蛋白食物快速參考</div>
+      雞胸肉 100g = 31g 蛋白質 / 鮭魚 100g = 25g / 豆腐 100g = 8g / 希臘優格 200g = 17g / 雞蛋 1顆 = 6g
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>建議多吃 vs 少吃</h2>
+    <div class="food-grid">
+      <div class="food-card good">
+        <h4>✅ 多吃這些</h4>
+        <ul>
+          <li>雞胸、魚肉、豆腐</li>
+          <li>蔬菜（各種顏色）</li>
+          <li>全穀類（糙米、燕麥）</li>
+          <li>莓果、蘋果</li>
+          <li>堅果（少量）</li>
+          <li>希臘優格</li>
+          <li>蛋（每天 1–2 顆）</li>
+        </ul>
+      </div>
+      <div class="food-card bad">
+        <h4>❌ 少吃這些</h4>
+        <ul>
+          <li>油炸食物</li>
+          <li>高脂肉（五花肉、培根）</li>
+          <li>含糖飲料、果汁</li>
+          <li>精緻澱粉（白麵包）</li>
+          <li>酒精（加重副作用）</li>
+          <li>加工食品</li>
+          <li>大量辛辣食物</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warn">
+      <div class="warn-label">⚠️ 高脂食物會加重噁心</div>
+      GLP-1 藥物本身就會減緩胃排空，如果又吃高脂肪食物（炸雞、肥肉、全脂奶），胃部「塞車」的情況會更嚴重，噁心感大幅加劇。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>注射後 24 小時飲食建議</h2>
+    <p>很多人在注射後的前 24–48 小時副作用最明顯，這段時間飲食要特別清淡。</p>
+    <div class="meal-plan">
+      <h4>📋 注射後隔天的參考菜單</h4>
+      <div class="meal-row">
+        <span class="meal-time">早餐</span>
+        <span class="meal-content">燕麥粥 + 水煮蛋 1顆，或低脂希臘優格 + 香蕉</span>
+      </div>
+      <div class="meal-row">
+        <span class="meal-time">午餐</span>
+        <span class="meal-content">清蒸魚 + 燙青菜 + 半碗糙米飯，清淡調味</span>
+      </div>
+      <div class="meal-row">
+        <span class="meal-time">下午點心</span>
+        <span class="meal-content">一小把無調味堅果，或蘇打餅乾 3–4 片</span>
+      </div>
+      <div class="meal-row">
+        <span class="meal-time">晚餐</span>
+        <span class="meal-content">雞肉蔬菜湯 + 少量白粥，如果不太餓就喝湯就好</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>吃東西的方式同樣重要</h2>
+    <ul>
+      <li><strong>細嚼慢嚥</strong>：GLP-1 藥物已讓你消化變慢，吃快了容易噁心</li>
+      <li><strong>少量多餐</strong>：一天 4–5 次，每次份量減半</li>
+      <li><strong>先吃蛋白質和蔬菜</strong>，最後才吃澱粉</li>
+      <li><strong>飯前 20 分鐘喝水</strong>，飯中和飯後不要喝大量水（加重飽脹感）</li>
+      <li>感覺飽了就立刻停，不要把盤子吃完</li>
+    </ul>
+    <h3>注射時間與飯後的關係</h3>
+    <p>猛健樂和週纖達可以在任何時間注射，<strong>不需要配合飯前或飯後</strong>。但很多人選擇在副作用比較輕的時候注射（例如睡前），讓睡眠中度過副作用最強的時段。</p>
+  </div>
+
+  <div class="card">
+    <h2>飲水量特別重要</h2>
+    <p>GLP-1 藥物可能導致嘔吐、腹瀉，容易脫水。加上食慾受抑制，有時你可能忘記喝水。</p>
+    <ul>
+      <li>目標：每天至少 <strong>2000–2500mL</strong></li>
+      <li>少量多次，不要一次灌大量水（容易噁心）</li>
+      <li>如果嘔吐嚴重，可以試試電解質飲料（低糖版）</li>
+      <li>咖啡、酒精會脫水，盡量避免</li>
+    </ul>
+  </div>
+
+  <div class="cta-box">
+    <h3>纖記幫你整合記錄飲食與注射</h3>
+    <p>記錄注射後的副作用，找出哪些食物讓你感覺更好或更差，讓你的減重旅程更有規律。</p>
+    <a href="https://slimly.vercel.app">免費開始使用 →</a>
+  </div>
+
+  <div class="card">
+    <h2>延伸閱讀</h2>
+    <div class="related">
+      <a href="mounjaro-side-effects.html">😣 猛健樂副作用解析</a>
+      <a href="plateau.html">📉 減重平台期怎麼辦</a>
+      <a href="injection-sites.html">💉 注射部位輪換指南</a>
+      <a href="after-stopping.html">⏹️ 停藥後怎麼維持體重</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 纖記 Slimly · 本文僅供衛教參考，不取代醫師建議</p>
+  <p style="margin-top:0.5rem;"><a href="https://slimly.vercel.app" style="color:#8FBCB0;">回到纖記 App</a></p>
+</footer>
+
+</body>
+</html>
