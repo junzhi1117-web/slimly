@@ -2,32 +2,207 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>纖記 Slimly — 台灣在地化處方減重藥追蹤</title>
-  <meta name="description" content="台灣在地化的處方減重藥追蹤工具。記錄注射日記、體重趨勢、副作用，由醫師設計，患者與醫師協作。" />
-  <meta name="keywords" content="纖記,Slimly,減重藥,處方減重,GLP-1,Ozempic,體重追蹤,台灣減重" />
-  <meta name="author" content="王俊智" />
-  <meta name="robots" content="index, follow" />
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://slimly.app" />
-  <meta property="og:title" content="纖記 Slimly — 台灣在地化處方減重藥追蹤" />
-  <meta property="og:description" content="台灣在地化的處方減重藥追蹤工具。記錄注射日記、體重趨勢、副作用，由醫師設計。" />
-  <meta property="og:image" content="https://slimly.app/og-image.png" />
-  <meta property="og:locale" content="zh_TW" />
-  <meta property="og:site_name" content="纖記 Slimly" />
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="纖記 Slimly — 台灣在地化處方減重藥追蹤" />
-  <meta name="twitter:description" content="台灣在地化的處方減重藥追蹤，由醫師設計。" />
-  <meta name="twitter:image" content="https://slimly.app/og-image.png" />
+
+    <!-- ── Primary SEO ──────────────────────────────── -->
+    <title>纖記 Slimly｜猛健樂・週纖達・善纖達 減重藥追蹤 App</title>
+    <meta name="description" content="台灣唯一針對猛健樂（Mounjaro）、週纖達（Wegovy）、善纖達（Saxenda）的處方減重藥追蹤 App。記錄注射日記、體重趨勢、副作用，由醫師設計，免費使用。" />
+    <meta name="keywords" content="猛健樂,Mounjaro,週纖達,Wegovy,善纖達,Saxenda,GLP-1,減重藥,處方減重,減肥,減重針,tirzepatide,semaglutide,liraglutide,體重追蹤,注射記錄,副作用記錄,台灣減重,纖記,Slimly,減重日記,GIP,GLP-1受體促進劑,醫師推薦減重工具" />
+    <meta name="author" content="王俊智醫師" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <link rel="canonical" href="https://slimly.vercel.app/" />
+
+    <!-- ── Open Graph ───────────────────────────────── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://slimly.vercel.app/" />
+    <meta property="og:title" content="纖記 Slimly｜猛健樂・週纖達・善纖達 減重藥追蹤 App" />
+    <meta property="og:description" content="台灣唯一針對猛健樂、週纖達、善纖達的處方減重藥追蹤 App。記錄注射日記、體重趨勢、副作用，由醫師設計，完全免費。" />
+    <meta property="og:image" content="https://slimly.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:site_name" content="纖記 Slimly" />
+
+    <!-- ── Twitter Card ─────────────────────────────── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="纖記 Slimly｜猛健樂・週纖達・善纖達 減重藥追蹤" />
+    <meta name="twitter:description" content="台灣唯一針對猛健樂、週纖達、善纖達的減重藥追蹤 App，由醫師設計。" />
+    <meta name="twitter:image" content="https://slimly.vercel.app/og-image.png" />
+
+    <!-- ── Schema.org 結構化資料 ────────────────────── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://slimly.vercel.app/#webapp",
+          "name": "纖記 Slimly",
+          "url": "https://slimly.vercel.app/",
+          "description": "台灣在地化處方減重藥追蹤 App，支援猛健樂（Mounjaro）、週纖達（Wegovy）、善纖達（Saxenda）。",
+          "applicationCategory": "HealthApplication",
+          "operatingSystem": "Web, iOS, Android",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "TWD",
+            "availability": "https://schema.org/InStock"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "王俊智",
+            "jobTitle": "家庭醫學科醫師"
+          },
+          "inLanguage": "zh-TW",
+          "featureList": [
+            "猛健樂 Mounjaro 注射記錄",
+            "週纖達 Wegovy 注射記錄",
+            "善纖達 Saxenda 注射記錄",
+            "體重趨勢圖表",
+            "副作用追蹤",
+            "注射部位輪換建議",
+            "雲端同步備份"
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://slimly.vercel.app/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "纖記可以追蹤哪些減重藥？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "纖記支援台灣三大處方減重藥：猛健樂（Mounjaro/tirzepatide）、週纖達（Wegovy/semaglutide）、善纖達（Saxenda/liraglutide）。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "猛健樂怎麼記錄注射？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "在纖記 App 中選擇猛健樂，記錄注射日期、劑量（2.5mg～15mg）、注射部位，並可記錄噁心、嘔吐等副作用。App 會自動提醒下次注射時間。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "纖記是免費的嗎？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "纖記基本功能完全免費，包含注射日記、體重追蹤、副作用記錄。Premium 方案（NT$149/月）提供 PDF 報告、雲端備份等進階功能。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "週纖達和善纖達有什麼不同？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "週纖達（Wegovy/semaglutide）每週注射一次，劑量從 0.25mg 逐步升到 2.4mg。善纖達（Saxenda/liraglutide）每天注射，從 0.6mg 升到 3.0mg。纖記會根據藥物類型自動調整追蹤模式。"
+              }
+            }
+          ]
+        },
+        {
+          "@type": "MedicalWebPage",
+          "@id": "https://slimly.vercel.app/#medical",
+          "name": "纖記 Slimly — 處方減重藥追蹤",
+          "description": "提供猛健樂、週纖達、善纖達使用者的注射追蹤、體重監測、副作用記錄工具。",
+          "medicalAudience": {
+            "@type": "MedicalAudience",
+            "audienceType": "Patient"
+          },
+          "about": [
+            {
+              "@type": "Drug",
+              "name": "猛健樂",
+              "alternateName": ["Mounjaro", "tirzepatide"],
+              "administrationRoute": "注射"
+            },
+            {
+              "@type": "Drug",
+              "name": "週纖達",
+              "alternateName": ["Wegovy", "semaglutide"],
+              "administrationRoute": "注射"
+            },
+            {
+              "@type": "Drug",
+              "name": "善纖達",
+              "alternateName": ["Saxenda", "liraglutide"],
+              "administrationRoute": "注射"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <!-- ── PWA ──────────────────────────────────────── -->
+    <link rel="apple-touch-icon" href="/og-image.png" />
+    <meta name="theme-color" content="#8FBCB0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="纖記" />
+
+    <!-- ── Fonts ─────────────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- ── Noscript SEO 靜態內容（爬蟲讀到這裡）────── -->
+    <noscript>
+      <style>
+        .seo-content { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.8; color: #333; }
+        h1 { color: #5C7A74; font-size: 2rem; }
+        h2 { color: #5C7A74; font-size: 1.4rem; margin-top: 2rem; }
+        .drug-card { border: 1px solid #8FBCB0; border-radius: 12px; padding: 1rem; margin: 1rem 0; }
+        .badge { display: inline-block; background: #8FBCB0; color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.85rem; margin-right: 8px; }
+      </style>
+      <div class="seo-content">
+        <h1>纖記 Slimly — 台灣首款猛健樂・週纖達・善纖達減重藥追蹤 App</h1>
+        <p>由家庭醫學科醫師設計，專為台灣處方減重藥使用者打造的健康管理工具。免費記錄注射日記、體重趨勢、副作用，讓你的減重旅程更有依據。</p>
+
+        <h2>支援藥物</h2>
+        <div class="drug-card">
+          <strong>猛健樂（Mounjaro / tirzepatide）</strong><br>
+          每週注射一次的 GIP/GLP-1 雙受體促進劑。劑量：2.5mg、5mg、7.5mg、10mg、12.5mg、15mg。<br>
+          <span class="badge">每週一次</span> <span class="badge">台灣禮來</span>
+        </div>
+        <div class="drug-card">
+          <strong>週纖達（Wegovy / semaglutide）</strong><br>
+          每週注射一次的 GLP-1 受體促進劑。劑量：0.25mg、0.5mg、1.0mg、1.7mg、2.4mg。<br>
+          <span class="badge">每週一次</span> <span class="badge">諾和諾德</span>
+        </div>
+        <div class="drug-card">
+          <strong>善纖達（Saxenda / liraglutide）</strong><br>
+          每天注射的 GLP-1 受體促進劑。劑量：0.6mg、1.2mg、1.8mg、2.4mg、3.0mg。<br>
+          <span class="badge">每天注射</span> <span class="badge">諾和諾德</span>
+        </div>
+
+        <h2>核心功能</h2>
+        <ul>
+          <li>📋 注射日記：記錄日期、劑量、注射部位（腹部/大腿/上臂）</li>
+          <li>📊 體重趨勢圖：視覺化追蹤減重進度</li>
+          <li>⚠️ 副作用記錄：噁心、嘔吐、疲倦、頭暈、便秘、腹瀉等</li>
+          <li>🔔 注射提醒：自動計算下次注射時間</li>
+          <li>☁️ 雲端同步：資料安全備份（Premium）</li>
+        </ul>
+
+        <h2>為什麼選擇纖記？</h2>
+        <ul>
+          <li>✅ 台灣在地化設計，支援猛健樂、週纖達、善纖達</li>
+          <li>✅ 由醫師設計，符合臨床使用習慣</li>
+          <li>✅ 完全免費基本功能</li>
+          <li>✅ 資料私密，不分享給第三方</li>
+        </ul>
+
+        <p>立即使用：<a href="https://slimly.vercel.app">https://slimly.vercel.app</a></p>
+      </div>
+    </noscript>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
