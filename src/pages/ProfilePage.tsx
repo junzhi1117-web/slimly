@@ -140,7 +140,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
         <section className="space-y-3">
           <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">衛教與說明</h3>
           <Card className="p-0 overflow-hidden">
-            <button onClick={() => window.open("/articles/dose-adjustment.html", "_blank")} className="flex justify-between items-center p-4 w-full text-left hover:bg-[var(--color-sage-light)] transition-colors">
+            <a href="/articles/dose-adjustment.html" target="_blank" rel="noopener noreferrer" className="flex justify-between items-center p-4 w-full text-left hover:bg-[var(--color-sage-light)] transition-colors">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-[var(--color-sage-light)] text-[var(--color-sage)] rounded-xl">
                   <Info size={18} />
@@ -151,9 +151,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
                 </div>
               </div>
               <ChevronRight size={18} className="text-[var(--color-muted)]" />
-            </button>
+            </a>
             <div className="h-px bg-[var(--color-border)] mx-4"></div>
-            <button onClick={() => window.open("/articles/mounjaro-side-effects.html", "_blank")} className="flex justify-between items-center p-4 w-full text-left hover:bg-[var(--color-sage-light)] transition-colors">
+            <a href="/articles/mounjaro-side-effects.html" target="_blank" rel="noopener noreferrer" className="flex justify-between items-center p-4 w-full text-left hover:bg-[var(--color-sage-light)] transition-colors">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-[var(--color-rose-light)] text-[var(--color-rose)] rounded-xl">
                   <ShieldCheck size={18} />
@@ -164,7 +164,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
                 </div>
               </div>
               <ChevronRight size={18} className="text-[var(--color-muted)]" />
-            </button>
+            </a>
           </Card>
         </section>
 
