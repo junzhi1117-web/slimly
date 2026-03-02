@@ -276,14 +276,14 @@ export const HomePage: React.FC<HomePageProps> = ({
           onClick={() => onAction('log')}
         >
           <Syringe size={20} className="mb-3 text-[var(--color-deep)] group-active:text-white" />
-          <span className="text-eyebrow !text-[var(--color-deep)] group-active:!text-white">記錄注射</span>
+          <span className="text-sm font-medium tracking-wide text-[var(--color-deep)] group-active:!text-white">記錄注射</span>
         </button>
         <button
           className="flex flex-col items-start justify-end p-4 min-h-[96px] rounded-2xl border border-[var(--color-sage)] bg-transparent transition-all active:bg-[var(--color-sage)] active:text-white group"
           onClick={() => onAction('weight')}
         >
           <TrendingDown size={20} className="mb-3 text-[var(--color-sage)] group-active:text-white" />
-          <span className="text-eyebrow !text-[var(--color-sage)] group-active:!text-white">記錄體重</span>
+          <span className="text-sm font-medium tracking-wide text-[var(--color-sage)] group-active:!text-white">記錄體重</span>
         </button>
       </div>
 

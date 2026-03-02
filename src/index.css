@@ -124,9 +124,11 @@ input, button, select, textarea {
 }
 
 .section-title {
-  font-family: var(--font-serif), var(--font-sans);
-  font-style: italic;
+  font-family: "Noto Serif TC", serif;
+  font-weight: 900;
+  font-style: normal;
   font-size: 1.1rem;
+  letter-spacing: -0.02em;
   color: var(--color-deep);
   margin-bottom: 0.75rem;
 }
@@ -210,11 +212,11 @@ input, button, select, textarea {
 /* ── Editorial utilities ─────────────── */
 
 .text-editorial {
-  font-family: "Cormorant Garamond", "Noto Serif TC", serif;
-  font-weight: 300;
-  font-style: italic;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-family: "Noto Serif TC", serif;
+  font-weight: 900;
+  font-style: normal;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
 .text-eyebrow {
