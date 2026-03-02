@@ -11,6 +11,7 @@ create table if not exists profiles (
   start_weight numeric not null,
   target_weight numeric,
   height numeric,
+  is_premium boolean not null default false,  -- 由後台 / 金流 webhook 寫入，前端只讀
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );

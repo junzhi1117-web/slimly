@@ -68,6 +68,7 @@ export function toSnakeProfile(p: UserProfile) {
     start_weight: p.startWeight,
     target_weight: p.targetWeight,
     height: p.height,
+    // is_premium 不從前端寫入，由後台 / webhook 管理
   }
 }
 
@@ -78,6 +79,7 @@ function toCamelProfile(row: Record<string, unknown>): UserProfile {
     injectionDay: row.injection_day as number | undefined,
     startDate: row.start_date as string,
     startWeight: row.start_weight as number,
+    isPremium: row.is_premium as boolean | undefined,
     targetWeight: row.target_weight as number | undefined,
     height: row.height as number | undefined,
   }

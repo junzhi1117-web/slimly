@@ -98,4 +98,5 @@ export interface UserProfile {
   startWeight: number
   targetWeight?: number
   height?: number
+  isPremium?: boolean    // Premium 訂閱狀態（由 Supabase 後台 / 金流 webhook 寫入）
 }

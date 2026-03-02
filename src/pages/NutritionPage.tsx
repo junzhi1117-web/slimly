@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { Header } from '../components/layout/Header'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
+import { UpgradeModal } from '../components/ui/UpgradeModal'
 import { FoodPhotoAnalyzer } from '../components/nutrition/FoodPhotoAnalyzer'
 import { FoodResultCard } from '../components/nutrition/FoodResultCard'
 import { CommonFoodPicker } from '../components/nutrition/CommonFoodPicker'
 import { NutritionBar } from '../components/nutrition/NutritionBar'
-import { Camera, UtensilsCrossed, List, Trash2 } from 'lucide-react'
+import { Camera, UtensilsCrossed, List, Trash2, Lock } from 'lucide-react'
 import { getTodayEntries, getNutritionTotals, computeProteinGoal, type CommonFood } from '../lib/nutrition'
 import type { AiFoodAnalysis, NutritionEntry, UserProfile, WeightLog } from '../types'
 
@@ -25,6 +26,9 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
 }) => {
   const [mode, setMode] = useState<InputMode>('idle')
   const [aiResult, setAiResult] = useState<AiFoodAnalysis | null>(null)
+  const [showUpgrade, setShowUpgrade] = useState(false)
+
+  const isPremium = profile.isPremium === true
 
 
   const today = new Date().toISOString().split('T')[0]
@@ -125,14 +129,22 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
         {/* 記錄入口 */}
         {mode === 'idle' && (
           <div className="grid grid-cols-2 gap-3">
-            <Button
-              fullWidth
-              className="h-14 gap-2 flex-col py-3 text-sm"
-              onClick={() => setMode('photo')}
-            >
-              <Camera size={20} />
-              拍照辨識
-            </Button>
+            {/* 拍照辨識 — Premium 限定 */}
+            <div className="relative">
+              <Button
+                fullWidth
+                className="h-14 gap-2 flex-col py-3 text-sm"
+                onClick={() => isPremium ? setMode('photo') : setShowUpgrade(true)}
+              >
+                <Camera size={20} />
+                拍照辨識
+              </Button>
+              {!isPremium && (
+                <div className="absolute top-1.5 right-1.5 bg-[var(--color-rose)]/90 rounded-full p-0.5">
+                  <Lock size={10} className="text-white" />
+                </div>
+              )}
+            </div>
             <Button
               fullWidth
               variant="secondary"
@@ -216,6 +228,14 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
         )}
 
       </main>
+
+      {/* Premium 升級 Modal */}
+      {showUpgrade && (
+        <UpgradeModal
+          featureName="AI 拍照辨識"
+          onClose={() => setShowUpgrade(false)}
+        />
+      )}
     </div>
   )
 }
