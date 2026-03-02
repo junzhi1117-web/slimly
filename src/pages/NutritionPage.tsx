@@ -9,6 +9,7 @@ import { CommonFoodPicker } from '../components/nutrition/CommonFoodPicker'
 import { NutritionBar } from '../components/nutrition/NutritionBar'
 import { Camera, UtensilsCrossed, List, Trash2, Lock } from 'lucide-react'
 import { getTodayEntries, getNutritionTotals, computeProteinGoal, type CommonFood } from '../lib/nutrition'
+import { canUsePhotoToday, getRemainingFreeUses, incrementPhotoUsage, DAILY_FREE_LIMIT } from '../lib/photoUsage'
 import type { AiFoodAnalysis, NutritionEntry, UserProfile, WeightLog } from '../types'
 
 type InputMode = 'idle' | 'photo' | 'common'
@@ -27,8 +28,10 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
   const [mode, setMode] = useState<InputMode>('idle')
   const [aiResult, setAiResult] = useState<AiFoodAnalysis | null>(null)
   const [showUpgrade, setShowUpgrade] = useState(false)
+  const [usageCount, setUsageCount] = useState(() => getRemainingFreeUses())
 
   const isPremium = profile.isPremium === true
+  const canUsePhoto = canUsePhotoToday(isPremium)
 
 
   const today = new Date().toISOString().split('T')[0]
@@ -54,6 +57,11 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
         fat: Math.round(food.fat * multiplier * 10) / 10,
         source: 'ai_photo',
       })
+    }
+    // 非 Premium 才計入免費次數
+    if (!isPremium) {
+      incrementPhotoUsage()
+      setUsageCount(getRemainingFreeUses())
     }
     setAiResult(null)
     setMode('idle')
@@ -129,19 +137,28 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
         {/* 記錄入口 */}
         {mode === 'idle' && (
           <div className="grid grid-cols-2 gap-3">
-            {/* 拍照辨識 — Premium 限定 */}
+            {/* 拍照辨識 — 每日 3 次免費，Premium 無限 */}
             <div className="relative">
               <Button
                 fullWidth
                 className="h-14 gap-2 flex-col py-3 text-sm"
-                onClick={() => isPremium ? setMode('photo') : setShowUpgrade(true)}
+                onClick={() => canUsePhoto ? setMode('photo') : setShowUpgrade(true)}
               >
                 <Camera size={20} />
                 拍照辨識
               </Button>
+              {/* 次數標籤 */}
               {!isPremium && (
-                <div className="absolute top-1.5 right-1.5 bg-[var(--color-rose)]/90 rounded-full p-0.5">
-                  <Lock size={10} className="text-white" />
+                <div className={`absolute top-1.5 right-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-none flex items-center gap-0.5 ${
+                  canUsePhoto
+                    ? 'bg-[var(--color-sage)] text-white'
+                    : 'bg-[var(--color-rose)]/90 text-white'
+                }`}>
+                  {canUsePhoto ? (
+                    <>{usageCount}/{DAILY_FREE_LIMIT}</>
+                  ) : (
+                    <><Lock size={8} /> 已用完</>
+                  )}
                 </div>
               )}
             </div>
@@ -232,7 +249,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
       {/* Premium 升級 Modal */}
       {showUpgrade && (
         <UpgradeModal
-          featureName="AI 拍照辨識"
+          featureName={`AI 拍照辨識（今日 ${DAILY_FREE_LIMIT} 次免費已用完）`}
           onClose={() => setShowUpgrade(false)}
         />
       )}
