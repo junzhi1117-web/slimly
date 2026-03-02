@@ -7,7 +7,7 @@ import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOut } from '../
 import type { UserProfile, MedicationType } from '../types'
 import type { User } from '@supabase/supabase-js'
 import { MEDICATIONS } from '../lib/medications'
-import { Info, ChevronRight, ShieldCheck, LogIn, LogOut, Mail, X } from 'lucide-react'
+import { Info, ChevronRight, ShieldCheck, LogIn, LogOut, Mail, X, Leaf } from 'lucide-react'
 
 interface ProfilePageProps {
   profile: UserProfile
@@ -122,6 +122,58 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
               <ChevronRight size={18} className="text-[var(--color-muted)]" />
             </Card>
           )}
+        </section>
+
+        {/* 停藥狀態 */}
+        <section className="space-y-3">
+          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">停藥狀態</h3>
+          <Card className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-xl ${profile.maintenanceMode ? 'bg-[#EFF6F4] text-[#5C7A74]' : 'bg-[var(--color-sage-light)] text-[var(--color-sage)]'}`}>
+                  <Leaf size={18} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">
+                    {profile.maintenanceMode ? '維持期模式' : '用藥中'}
+                  </p>
+                  <p className="text-xs text-[var(--color-muted)]">
+                    {profile.maintenanceMode
+                      ? `停藥日期：${profile.maintenanceStartDate ?? '未記錄'}`
+                      : '已停藥？開啟維持期模式'}
+                  </p>
+                </div>
+              </div>
+              {/* Toggle */}
+              <button
+                onClick={() => {
+                  if (!profile.maintenanceMode) {
+                    // 開啟：記錄今天為停藥日
+                    const today = new Date().toISOString().split('T')[0]
+                    onUpdateProfile({ maintenanceMode: true, maintenanceStartDate: today })
+                  } else {
+                    // 關閉：恢復用藥中
+                    onUpdateProfile({ maintenanceMode: false, maintenanceStartDate: undefined })
+                  }
+                }}
+                className={`relative inline-flex w-12 h-6 rounded-full transition-colors duration-200 focus:outline-none ${
+                  profile.maintenanceMode ? 'bg-[#5C7A74]' : 'bg-[var(--color-border)]'
+                }`}
+                style={{ minWidth: '48px' }}
+              >
+                <span
+                  className={`inline-block w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200 mt-0.5 ${
+                    profile.maintenanceMode ? 'translate-x-6' : 'translate-x-0.5'
+                  }`}
+                />
+              </button>
+            </div>
+            {profile.maintenanceMode && (
+              <p className="text-xs text-[var(--color-muted)] mt-3 leading-relaxed">
+                🌱 維持期模式已開啟。注射日記已隱藏，飲食記錄置前，首頁訊息換成維持期衛教陪伴。
+              </p>
+            )}
+          </Card>
         </section>
 
         <section className="space-y-3">

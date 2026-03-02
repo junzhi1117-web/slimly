@@ -107,5 +107,7 @@ export interface UserProfile {
   startWeight: number
   targetWeight?: number
   height?: number
-  isPremium?: boolean    // Premium 訂閱狀態（由 Supabase 後台 / 金流 webhook 寫入）
+  isPremium?: boolean          // Premium 訂閱狀態（由 Supabase 後台 / 金流 webhook 寫入）
+  maintenanceMode?: boolean    // 是否進入維持期（已停藥）
+  maintenanceStartDate?: string // 停藥日期 YYYY-MM-DD
 }

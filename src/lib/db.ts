@@ -68,6 +68,8 @@ export function toSnakeProfile(p: UserProfile) {
     start_weight: p.startWeight,
     target_weight: p.targetWeight,
     height: p.height,
+    maintenance_mode: p.maintenanceMode ?? false,
+    maintenance_start_date: p.maintenanceStartDate ?? null,
     // is_premium 不從前端寫入，由後台 / webhook 管理
   }
 }
@@ -82,6 +84,8 @@ function toCamelProfile(row: Record<string, unknown>): UserProfile {
     isPremium: row.is_premium as boolean | undefined,
     targetWeight: row.target_weight as number | undefined,
     height: row.height as number | undefined,
+    maintenanceMode: row.maintenance_mode as boolean | undefined,
+    maintenanceStartDate: row.maintenance_start_date as string | undefined,
   }
 }
 

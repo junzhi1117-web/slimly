@@ -183,61 +183,72 @@ def test_bottom_nav_all_tabs(page: Page):
         assert err == 0, f"JS error after nav tab {i}"
 
 
-def test_food_noise_appears_on_homepage(page: Page):
-    """Food noise slider should appear when startDate ≥3 days ago."""
-    goto_home(page)
-    # Inject: set startDate to 10 days ago in localStorage profile
-    page.evaluate("""() => {
-        const raw = localStorage.getItem('slimly_profile');
-        if (!raw) return;
-        const p = JSON.parse(raw);
-        const d = new Date();
-        d.setDate(d.getDate() - 10);
-        p.startDate = d.toISOString().split('T')[0];
-        localStorage.setItem('slimly_profile', JSON.stringify(p));
-    }""")
-    page.reload()
-    page.wait_for_load_state("networkidle")
+def test_maintenance_toggle_profile(page: Page):
+    """Navigate to ProfilePage and find the 停藥狀態 toggle."""
+    nav_buttons = page.locator("nav button").all()
+    nav_buttons[-1].click()   # Last tab = 我 (profile)
     page.wait_for_timeout(500)
-    assert page.locator("text=食慾雜音").is_visible(), "食慾雜音 not visible after day 3"
+    assert page.locator("text=停藥狀態").is_visible(), "停藥狀態 section not found in ProfilePage"
+    assert page.locator("text=用藥中").is_visible(), "Toggle default state (用藥中) not visible"
 
 
-def test_food_noise_slider_records(page: Page):
-    """Move slider and tap 記錄今天; confirm saved state after hint disappears."""
-    slider = page.locator("input[type='range']").first
-    assert slider.is_visible(), "Range slider not found"
-    # Set to level 3
-    slider.fill("3")
-    page.wait_for_timeout(200)
-    # Should show 記錄今天 button (unsaved)
-    save_btn = page.locator("text=記錄今天").first
-    assert save_btn.is_visible(), "記錄今天 button not visible after slider move"
-    save_btn.click()
-    # showSaveHint shows "已記錄 ✓" for 2s, then disappears → 修改 appears
-    # Wait for hint then for 修改 (up to 4s)
-    page.wait_for_timeout(300)
-    hint = page.locator("text=已記錄")
-    if hint.is_visible():
-        # Wait for hint to fade
-        page.wait_for_timeout(2200)
-    expect(page.locator("text=修改")).to_be_visible(timeout=3000)
+def test_maintenance_homepage(page: Page):
+    """Enable maintenance mode; HomePage should show 維持期."""
+    # Click the toggle button inside the 停藥狀態 card
+    toggle = page.locator("text=停藥狀態").locator("..").locator("button").first
+    toggle.click()
+    page.wait_for_timeout(500)
+    # .first — "維持期模式" may appear in both the label and a badge
+    assert page.locator("text=維持期模式").first.is_visible(), "維持期模式 label not shown after toggle"
+    # Go home
+    nav_buttons = page.locator("nav button").all()
+    nav_buttons[0].click()
+    page.wait_for_timeout(500)
+    assert page.locator("text=維持期第").is_visible(), "維持期 greeting not on HomePage"
+    assert page.locator("text=維持中").is_visible(), "維持中 badge not visible"
 
 
-def test_food_noise_trend_needs_2entries(page: Page):
-    """Trend chart appears only with ≥2 entries."""
-    # Inject second entry for yesterday
-    page.evaluate("""() => {
-        const raw = localStorage.getItem('slimly_food_noise_logs') || '[]';
-        const logs = JSON.parse(raw);
-        const yest = new Date(); yest.setDate(yest.getDate() - 1);
-        logs.push({ id: 'test-yest', date: yest.toISOString().split('T')[0], level: 7 });
-        localStorage.setItem('slimly_food_noise_logs', JSON.stringify(logs));
-    }""")
-    page.reload()
-    page.wait_for_load_state("networkidle")
-    page.wait_for_timeout(600)
-    # Trend chart area (text)
-    assert page.locator("text=食慾雜音趨勢").is_visible(), "Trend chart section not visible with ≥2 entries"
+def test_maintenance_nav(page: Page):
+    """In maintenance mode, nav should have no 注射 tab."""
+    nav_buttons = page.locator("nav button").all()
+    nav_labels = [b.inner_text() for b in nav_buttons]
+    assert "注射" not in nav_labels, f"注射 tab should be hidden in maintenance mode, got: {nav_labels}"
+    # 飲食 should be second tab (index 1)
+    assert "飲食" in nav_labels, "飲食 tab missing"
+    assert nav_labels.index("飲食") < nav_labels.index("體重"), "飲食 should come before 體重"
+
+
+def test_maintenance_message(page: Page):
+    """Maintenance contextual message should be visible."""
+    # Ensure we're on HomePage (previous test may have navigated away)
+    nav_buttons = page.locator("nav button").all()
+    nav_buttons[0].click()
+    page.wait_for_timeout(500)
+    assert page.locator("text=記錄今日體重").is_visible(), "Single CTA (記錄今日體重) not visible"
+    # Message card (emoji + title, depends on start date — may or may not show)
+    page.screenshot(path="/tmp/slimly_maintenance.png", full_page=True)
+    # At minimum, no 記錄注射 CTA
+    assert page.locator("text=記錄注射").count() == 0, "記錄注射 should be hidden in maintenance mode"
+
+
+def test_maintenance_disable(page: Page):
+    """Disable maintenance mode → back to normal UI."""
+    nav_buttons = page.locator("nav button").all()
+    nav_buttons[-1].click()   # Profile tab
+    page.wait_for_timeout(500)
+    # Toggle again to disable
+    toggle_area = page.locator("text=維持期模式").locator("../..").locator("button").first
+    toggle_area.click()
+    page.wait_for_timeout(500)
+    assert page.locator("text=用藥中").is_visible(), "Should return to 用藥中 state"
+    # Back to home — should show normal view
+    nav_buttons = page.locator("nav button").all()
+    nav_buttons[0].click()
+    page.wait_for_timeout(500)
+    assert page.locator("text=記錄注射").is_visible(), "記錄注射 should be back in normal mode"
+
+
+pass  # food noise tests removed (feature deleted in P2)
 
 
 # ── Runner ─────────────────────────────────────────────────────────────────────
@@ -268,10 +279,12 @@ def main():
         run("Weight log entry submission", test_weight_log_entry, page)
         run("All bottom nav tabs reachable", test_bottom_nav_all_tabs, page)
 
-        print("\n📋 Food Noise (P1 feature)")
-        run("Slider appears after day 3", test_food_noise_appears_on_homepage, page)
-        run("Slider records and shows saved state", test_food_noise_slider_records, page)
-        run("Trend chart shows with ≥2 entries", test_food_noise_trend_needs_2entries, page)
+        print("\n📋 Maintenance Mode (P2 feature)")
+        run("Maintenance toggle in ProfilePage", test_maintenance_toggle_profile, page)
+        run("Maintenance mode: homepage shows 維持期", test_maintenance_homepage, page)
+        run("Maintenance mode: nav hides 注射 tab", test_maintenance_nav, page)
+        run("Maintenance mode: message card visible", test_maintenance_message, page)
+        run("Disable maintenance mode", test_maintenance_disable, page)
 
         browser.close()
 
