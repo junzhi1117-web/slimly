@@ -26,7 +26,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab, m
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-[var(--color-surface)]/90 backdrop-blur-md border-t border-[var(--color-border)]/40 pb-[env(safe-area-inset-bottom)]">
-      <div className="flex justify-around items-center h-16 max-w-md mx-auto">
+      <div className="flex justify-around items-center h-[60px] max-w-md mx-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id
@@ -35,14 +35,14 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab, m
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`relative flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
-                isActive ? 'text-[var(--color-sage)]' : 'text-[var(--color-muted)]'
+                isActive ? 'text-[var(--color-sage)]' : 'text-[var(--color-muted)] opacity-60'
               }`}
             >
-              {isActive && (
-                <span className="absolute top-1.5 w-5 h-[3px] rounded-full bg-[var(--color-sage)]" />
-              )}
               <Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
-              <span className="text-[10px] font-medium">{tab.label}</span>
+              <span className="text-[9px] font-medium" style={{ letterSpacing: '0.05em' }}>{tab.label}</span>
+              {isActive && (
+                <span className="absolute bottom-2 w-1 h-1 rounded-full bg-[var(--color-sage)]" />
+              )}
             </button>
           )
         })}

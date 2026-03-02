@@ -17,7 +17,7 @@ const variantClasses = {
 export const Card: React.FC<CardProps> = ({ children, className = '', onClick, variant = 'default' }) => {
   return (
     <div
-      className={`${variantClasses[variant]} p-4 ${className}`}
+      className={`${variantClasses[variant]} p-5 ${className}`}
       onClick={onClick}
     >
       {children}

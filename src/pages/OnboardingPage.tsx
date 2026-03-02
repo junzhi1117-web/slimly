@@ -122,13 +122,13 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
   return (
     <div className="min-h-screen bg-[var(--color-bg)] flex flex-col overflow-hidden">
       {/* Progress bar */}
-      <div className="px-6 pt-[env(safe-area-inset-top)] mt-4">
+      <div className="px-5 pt-[env(safe-area-inset-top)] mt-8">
         <div className="flex gap-2">
           {[0, 1, 2, 3].map(i => (
             <div
               key={i}
-              className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                i <= step ? 'bg-[var(--color-sage)]' : 'bg-[var(--color-border)]'
+              className={`h-0.5 flex-1 rounded-full transition-all duration-300 ${
+                i <= step ? 'bg-[var(--color-sage)]' : 'bg-[var(--color-sage)]/20'
               }`}
             />
           ))}
@@ -142,8 +142,8 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           style={{ transform: `translateX(calc(-${step} * 100vw))`, width: '400vw' }}
         >
           {/* Step 1 — 選藥物 */}
-          <div className="w-screen shrink-0 px-6 overflow-y-auto">
-            <h1 className="text-2xl font-serif italic text-[var(--color-deep)] mb-2">
+          <div className="w-screen shrink-0 px-5 overflow-y-auto">
+            <h1 className="text-display text-2xl text-[var(--color-deep)] mb-2">
               你使用哪種藥物？
             </h1>
             <p className="text-sm text-[var(--color-muted)] mb-6">
@@ -160,8 +160,8 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
                     onClick={() => handleMedChange(type)}
                     className={`cursor-pointer transition-all ${
                       selected
-                        ? '!shadow-[0_4px_20px_rgba(143,188,176,0.3)] ring-2 ring-[var(--color-sage)]'
-                        : ''
+                        ? 'border-2 border-[var(--color-sage)] !bg-[var(--color-sage)]/8'
+                        : 'border-2 border-transparent'
                     }`}
                   >
                     <div className="flex justify-between items-center">
@@ -186,8 +186,8 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           </div>
 
           {/* Step 2 — 劑量與時間 */}
-          <div className="w-screen shrink-0 px-6 overflow-y-auto">
-            <h1 className="text-2xl font-serif italic text-[var(--color-deep)] mb-2">
+          <div className="w-screen shrink-0 px-5 overflow-y-auto">
+            <h1 className="text-display text-2xl text-[var(--color-deep)] mb-2">
               設定你的劑量與時間
             </h1>
             <p className="text-sm text-[var(--color-muted)] mb-6">
@@ -263,8 +263,8 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           </div>
 
           {/* Step 3 — 體重目標 */}
-          <div className="w-screen shrink-0 px-6 overflow-y-auto">
-            <h1 className="text-2xl font-serif italic text-[var(--color-deep)] mb-2">
+          <div className="w-screen shrink-0 px-5 overflow-y-auto">
+            <h1 className="text-display text-2xl text-[var(--color-deep)] mb-2">
               設定你的體重目標
             </h1>
             <p className="text-sm text-[var(--color-muted)] mb-6">
@@ -317,8 +317,8 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           </div>
 
           {/* Step 4 — 建立帳號 */}
-          <div className="w-screen shrink-0 px-6 overflow-y-auto">
-            <h1 className="text-2xl font-serif italic text-[var(--color-deep)] mb-2">
+          <div className="w-screen shrink-0 px-5 overflow-y-auto">
+            <h1 className="text-display text-2xl text-[var(--color-deep)] mb-2">
               建立帳號，安全保存
             </h1>
             <p className="text-sm text-[var(--color-muted)] mb-6">
@@ -391,22 +391,21 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
       </div>
 
       {/* Bottom navigation */}
-      <div className="px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-4 flex gap-3 bg-[var(--color-bg)]">
+      <div className="px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-4 flex gap-3 bg-[var(--color-bg)]">
         {step > 0 && (
           <Button variant="ghost" onClick={prev} className="px-4">
             <ChevronLeft size={20} />
           </Button>
         )}
         {step < 3 ? (
-          <Button
-            fullWidth
+          <button
+            className="btn-primary flex-1 gap-2"
             onClick={next}
             disabled={!canGoNext()}
-            className="gap-2"
           >
             繼續
             <ChevronRight size={18} />
-          </Button>
+          </button>
         ) : (
           <div className="flex-1" />
         )}
