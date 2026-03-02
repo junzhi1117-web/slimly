@@ -86,14 +86,6 @@ export const HomePage: React.FC<HomePageProps> = ({
         />
       )}
 
-      {/* Timeline contextual message */}
-      {timelineMessage && (
-        <TimelineMessageCard
-          message={timelineMessage}
-          onDismiss={handleTimelineDismiss}
-        />
-      )}
-
       {/* Greeting */}
       <div>
         <h2 className="text-3xl font-serif italic text-[var(--color-deep)]">
@@ -129,27 +121,33 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </Card>
 
-      {/* Quick Actions — card-like */}
+      {/* Quick Actions — solid filled, always visible above fold */}
       <div className="grid grid-cols-2 gap-3">
-        <Card
-          className="cursor-pointer flex flex-col items-center justify-center py-5 gap-2 transition-all active:scale-[0.97]"
+        <button
+          className="flex flex-col items-center justify-center py-5 gap-2 rounded-2xl transition-all active:scale-[0.97] shadow-sm"
+          style={{ backgroundColor: '#5C7A74' }}
           onClick={() => onAction('log')}
         >
-          <div className="w-10 h-10 rounded-2xl bg-[var(--color-sage-light)] flex items-center justify-center text-[var(--color-sage)]">
-            <Syringe size={20} />
-          </div>
-          <span className="text-sm font-medium text-[var(--color-deep)]">記錄注射</span>
-        </Card>
-        <Card
-          className="cursor-pointer flex flex-col items-center justify-center py-5 gap-2 transition-all active:scale-[0.97]"
+          <Syringe size={22} className="text-white" />
+          <span className="text-sm font-semibold text-white">記錄注射</span>
+        </button>
+        <button
+          className="flex flex-col items-center justify-center py-5 gap-2 rounded-2xl transition-all active:scale-[0.97] shadow-sm"
+          style={{ backgroundColor: '#8FBCB0' }}
           onClick={() => onAction('weight')}
         >
-          <div className="w-10 h-10 rounded-2xl bg-[var(--color-sage-light)] flex items-center justify-center text-[var(--color-sage)]">
-            <TrendingDown size={20} />
-          </div>
-          <span className="text-sm font-medium text-[var(--color-deep)]">記錄體重</span>
-        </Card>
+          <TrendingDown size={22} className="text-white" />
+          <span className="text-sm font-semibold text-white">記錄體重</span>
+        </button>
       </div>
+
+      {/* Timeline contextual message — 放在 CTA 下方，展開不影響核心操作 */}
+      {timelineMessage && (
+        <TimelineMessageCard
+          message={timelineMessage}
+          onDismiss={handleTimelineDismiss}
+        />
+      )}
 
       {/* Weight Chart Preview */}
       <section>
