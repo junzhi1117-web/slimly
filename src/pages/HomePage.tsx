@@ -169,7 +169,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* Weight Chart */}
         <section>
           <div className="flex justify-between items-end mb-3">
-            <h3 className="section-title !mb-0">體重趨勢</h3>
+            <h3 className="text-editorial text-2xl text-[var(--color-deep)] !mb-0">體重趨勢</h3>
             <button onClick={() => onAction('weight')} className="text-[var(--color-sage)] text-sm flex items-center">
               完整數據 <ChevronRight size={16} />
             </button>
@@ -240,56 +240,50 @@ export const HomePage: React.FC<HomePageProps> = ({
 
       {/* Greeting */}
       <div>
-        <h2 className="text-3xl font-serif italic tracking-tight text-[var(--color-deep)]">
+        <h2 className="text-editorial text-[72px] leading-none text-[var(--color-deep)]">
           {getGreeting()}
         </h2>
-        <p className="text-label text-[var(--color-muted)] mt-1">
-          今天是你的第 {totalDays} 天
+        <p className="text-eyebrow mt-3">
+          第 {totalDays} 天 · {format(new Date(), 'MM月dd日', { locale: zhTW })}
         </p>
       </div>
 
-      {/* Status Card — Hero */}
-      <Card variant="hero">
-        <div className="flex justify-between items-start mb-4">
+      {/* Status Card — Elegant */}
+      <div className="card-elegant p-5">
+        <p className="text-eyebrow mb-3">{med.name}</p>
+        <p className="stat-display text-[64px] text-[var(--color-deep)]">
+          {profile.currentDose}<span className="text-3xl ml-1">{med.unit}</span>
+        </p>
+        <div className="divider-monet my-4" />
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-white/60 text-sm mb-1">目前進度</p>
-            <h2 className="text-2xl font-semibold">{med.name} {profile.currentDose}{med.unit}</h2>
-          </div>
-          <Badge variant="sage" className="!bg-white/15 !text-white !border-transparent">
-            {med.frequency === 'weekly' ? '每週一次' : '每日一次'}
-          </Badge>
-        </div>
-        <div className="flex gap-3">
-          <div className="flex-1 bg-white/10 rounded-2xl p-3">
-            <p className="text-white/50 text-xs mb-1">下次注射</p>
-            <p className="stat-number text-2xl text-white">
+            <p className="text-eyebrow mb-1">下次注射</p>
+            <p className="stat-display text-3xl text-[var(--color-deep)]">
               {nextInjectionDays <= 0 ? '今天' : `${nextInjectionDays} 天後`}
             </p>
           </div>
-          <div className="flex-1 bg-white/10 rounded-2xl p-3">
-            <p className="text-white/50 text-xs mb-1">已持續</p>
-            <p className="stat-number text-2xl text-white">{totalDays} 天</p>
+          <div>
+            <p className="text-eyebrow mb-1">已持續</p>
+            <p className="stat-display text-3xl text-[var(--color-deep)]">{totalDays} 天</p>
           </div>
         </div>
-      </Card>
+      </div>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-3">
         <button
-          className="flex flex-col items-center justify-center min-h-[88px] gap-2 rounded-2xl transition-all active:scale-[0.97] shadow-sm"
-          style={{ backgroundColor: '#5C7A74' }}
+          className="flex flex-col items-start justify-end p-4 min-h-[96px] rounded-2xl border border-[var(--color-deep)] bg-transparent transition-all active:bg-[var(--color-deep)] active:text-white group"
           onClick={() => onAction('log')}
         >
-          <Syringe size={24} className="text-white" />
-          <span className="text-base font-semibold text-white">記錄注射</span>
+          <Syringe size={20} className="mb-3 text-[var(--color-deep)] group-active:text-white" />
+          <span className="text-eyebrow !text-[var(--color-deep)] group-active:!text-white">記錄注射</span>
         </button>
         <button
-          className="flex flex-col items-center justify-center min-h-[88px] gap-2 rounded-2xl transition-all active:scale-[0.97] shadow-sm"
-          style={{ backgroundColor: '#8FBCB0' }}
+          className="flex flex-col items-start justify-end p-4 min-h-[96px] rounded-2xl border border-[var(--color-sage)] bg-transparent transition-all active:bg-[var(--color-sage)] active:text-white group"
           onClick={() => onAction('weight')}
         >
-          <TrendingDown size={24} className="text-white" />
-          <span className="text-base font-semibold text-white">記錄體重</span>
+          <TrendingDown size={20} className="mb-3 text-[var(--color-sage)] group-active:text-white" />
+          <span className="text-eyebrow !text-[var(--color-sage)] group-active:!text-white">記錄體重</span>
         </button>
       </div>
 
@@ -304,7 +298,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* Weight Chart Preview */}
       <section>
         <div className="flex justify-between items-end mb-3">
-          <h3 className="section-title !mb-0">體重趨勢</h3>
+          <h3 className="text-editorial text-2xl text-[var(--color-deep)] !mb-0">體重趨勢</h3>
           <button onClick={() => onAction('weight')} className="text-[var(--color-sage)] text-sm flex items-center">
             完整數據 <ChevronRight size={16} />
           </button>
@@ -340,7 +334,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <ChevronRight size={14} className="text-[var(--color-muted)]" />
             </div>
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="stat-number text-lg text-[var(--color-sage)]">
+              <span className="stat-display text-3xl text-[var(--color-sage)]">
                 {Math.round(totals.protein)}g
               </span>
               <span className="text-xs text-[var(--color-muted)]">/ {goal.grams}g 目標</span>

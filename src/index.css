@@ -23,6 +23,8 @@
   font-family: var(--font-sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
 }
 
 html, body {
@@ -203,6 +205,43 @@ input, button, select, textarea {
   border: 2px solid #8FBCB0;
   box-shadow: 0 2px 8px rgba(92, 122, 116, 0.25);
   cursor: pointer;
+}
+
+/* ── Editorial utilities ─────────────── */
+
+.text-editorial {
+  font-family: "Cormorant Garamond", "Noto Serif TC", serif;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.text-eyebrow {
+  font-family: "Noto Sans TC", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.stat-display {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.card-elegant {
+  background: var(--color-surface);
+  border: 1px solid rgba(143, 188, 176, 0.18);
+  border-radius: 20px;
+}
+
+.divider-monet {
+  height: 0.5px;
+  background: rgba(143, 188, 176, 0.25);
 }
 
 /* ── Animations ──────────────────────── */

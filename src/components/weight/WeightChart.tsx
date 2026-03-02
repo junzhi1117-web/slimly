@@ -57,10 +57,10 @@ export const WeightChart: React.FC<WeightChartProps> = ({ logs, height = 300 }) 
           <Line
             type="monotone"
             dataKey="weight"
-            stroke="#8FBCB0"
-            strokeWidth={3}
-            dot={{ r: 4, fill: '#8FBCB0', strokeWidth: 2, stroke: '#fff' }}
-            activeDot={{ r: 6, fill: '#5C7A74' }}
+            stroke="#5C7A74"
+            strokeWidth={1.5}
+            dot={{ r: 3, fill: '#5C7A74', strokeWidth: 1.5, stroke: '#fff' }}
+            activeDot={{ r: 5, fill: '#5C7A74' }}
           />
         </LineChart>
       </ResponsiveContainer>

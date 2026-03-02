@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ title, showBack, onBack }) => {
           <ChevronLeft size={24} />
         </button>
       )}
-      <h1 className="text-2xl font-serif italic tracking-tight text-[var(--color-deep)]">{title}</h1>
+      <h1 className="text-editorial text-3xl text-[var(--color-deep)]">{title}</h1>
     </header>
   )
 }

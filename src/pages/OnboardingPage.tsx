@@ -122,7 +122,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
   return (
     <div className="min-h-screen bg-[var(--color-bg)] flex flex-col overflow-hidden">
       {/* Progress bar */}
-      <div className="px-5 pt-[env(safe-area-inset-top)] mt-8">
+      <div className="px-5 pt-12 pt-[env(safe-area-inset-top)]">
         <div className="flex gap-2">
           {[0, 1, 2, 3].map(i => (
             <div
@@ -143,10 +143,10 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
         >
           {/* Step 1 — 選藥物 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
-            <h1 className="text-display text-2xl text-[var(--color-deep)] mb-2">
+            <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
               你使用哪種藥物？
             </h1>
-            <p className="text-sm text-[var(--color-muted)] mb-6">
+            <p className="text-eyebrow mt-3 mb-8">
               選擇你正在使用的處方減重藥
             </p>
 
@@ -164,10 +164,10 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
                         : 'border-2 border-transparent'
                     }`}
                   >
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center min-h-[72px]">
                       <div>
-                        <h3 className="font-semibold text-lg">{m.name}</h3>
-                        <p className="text-sm text-[var(--color-muted)]">
+                        <h3 className="text-lg font-medium">{m.name}</h3>
+                        <p className="text-eyebrow">
                           {m.brandName} · {m.frequency === 'weekly' ? '每週注射' : '每日注射'}
                         </p>
                       </div>
@@ -187,10 +187,10 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
 
           {/* Step 2 — 劑量與時間 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
-            <h1 className="text-display text-2xl text-[var(--color-deep)] mb-2">
+            <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
               設定你的劑量與時間
             </h1>
-            <p className="text-sm text-[var(--color-muted)] mb-6">
+            <p className="text-eyebrow mt-3 mb-8">
               你可以隨時在設定中調整
             </p>
 
@@ -264,10 +264,10 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
 
           {/* Step 3 — 體重目標 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
-            <h1 className="text-display text-2xl text-[var(--color-deep)] mb-2">
+            <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
               設定你的體重目標
             </h1>
-            <p className="text-sm text-[var(--color-muted)] mb-6">
+            <p className="text-eyebrow mt-3 mb-8">
               目標體重和身高為選填，方便追蹤進度
             </p>
 
@@ -318,10 +318,10 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
 
           {/* Step 4 — 建立帳號 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
-            <h1 className="text-display text-2xl text-[var(--color-deep)] mb-2">
+            <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
               建立帳號，安全保存
             </h1>
-            <p className="text-sm text-[var(--color-muted)] mb-6">
+            <p className="text-eyebrow mt-3 mb-8">
               登入後資料會雲端同步，也可以稍後再說
             </p>
 
