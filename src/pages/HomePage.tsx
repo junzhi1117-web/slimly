@@ -4,8 +4,9 @@ import { Badge } from '../components/ui/Badge'
 import { WeightChart } from '../components/weight/WeightChart'
 import { SideEffectInsightCard } from '../components/insight/SideEffectInsightCard'
 import { PostInjectionCheckInBanner, findPendingCheckIn } from '../components/insight/PostInjectionCheckInBanner'
-import type { DoseRecord, WeightLog, UserProfile, SideEffectEntry } from '../types'
+import type { DoseRecord, WeightLog, UserProfile, SideEffectEntry, NutritionEntry } from '../types'
 import { MEDICATIONS, INJECTION_SITE_LABELS } from '../lib/medications'
+import { computeProteinGoal, getTodayEntries, getNutritionTotals } from '../lib/nutrition'
 import { Syringe, TrendingDown, Calendar, ChevronRight } from 'lucide-react'
 import { format, parseISO, differenceInDays } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
@@ -14,6 +15,7 @@ interface HomePageProps {
   profile: UserProfile
   doseRecords: DoseRecord[]
   weightLogs: WeightLog[]
+  nutritionEntries: NutritionEntry[]
   onAction: (tab: string) => void
   onUpdateSideEffects?: (id: string, sideEffects: SideEffectEntry[]) => void
 }
@@ -26,7 +28,7 @@ function getGreeting(): string {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
-  profile, doseRecords, weightLogs, onAction, onUpdateSideEffects
+  profile, doseRecords, weightLogs, nutritionEntries, onAction, onUpdateSideEffects
 }) => {
   const [dismissedId, setDismissedId] = useState<string | null>(null)
 
@@ -151,6 +153,40 @@ export const HomePage: React.FC<HomePageProps> = ({
           )}
         </Card>
       </section>
+
+      {/* 蛋白質摘要卡 */}
+      {(() => {
+        const todayNutrition = getTodayEntries(nutritionEntries)
+        const totals = getNutritionTotals(todayNutrition)
+        const goal = computeProteinGoal(profile, weightLogs)
+        const pct = Math.min(100, Math.round(totals.protein / goal.grams * 100))
+        return (
+          <div
+            className="bg-[var(--color-surface)] rounded-3xl px-4 py-3 border border-[var(--color-border)] cursor-pointer active:opacity-80"
+            onClick={() => onAction('nutrition')}
+          >
+            <div className="flex justify-between items-center mb-2">
+              <p className="text-xs font-medium text-[var(--color-muted)]">今日蛋白質</p>
+              <ChevronRight size={14} className="text-[var(--color-muted)]" />
+            </div>
+            <div className="flex items-baseline gap-2 mb-2">
+              <span className="stat-number text-lg text-[var(--color-sage)]">
+                {Math.round(totals.protein)}g
+              </span>
+              <span className="text-xs text-[var(--color-muted)]">/ {goal.grams}g 目標</span>
+              {todayNutrition.length === 0 && (
+                <span className="text-xs text-[var(--color-muted)] ml-auto">點擊記錄飲食</span>
+              )}
+            </div>
+            <div className="h-1.5 bg-[var(--color-sage-light)] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[var(--color-sage)] rounded-full transition-all duration-500"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Side Effect Insight — inline, not a separate section */}
       {doseRecords.length >= 1 && (

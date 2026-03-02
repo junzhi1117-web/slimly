@@ -1,5 +1,5 @@
 import React from 'react'
-import { Home, BookOpen, TrendingDown, User } from 'lucide-react'
+import { Home, BookOpen, TrendingDown, UtensilsCrossed, User } from 'lucide-react'
 
 interface BottomNavProps {
   activeTab: string
@@ -8,10 +8,11 @@ interface BottomNavProps {
 
 export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab }) => {
   const tabs = [
-    { id: 'home', label: '首頁', icon: Home },
-    { id: 'log', label: '日記', icon: BookOpen },
-    { id: 'weight', label: '體重', icon: TrendingDown },
-    { id: 'profile', label: '我', icon: User },
+    { id: 'home',      label: '首頁', icon: Home },
+    { id: 'log',       label: '日記', icon: BookOpen },
+    { id: 'weight',    label: '體重', icon: TrendingDown },
+    { id: 'nutrition', label: '飲食', icon: UtensilsCrossed },
+    { id: 'profile',   label: '我',   icon: User },
   ]
 
   return (

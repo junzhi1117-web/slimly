@@ -56,6 +56,27 @@ create policy "Users can manage own weight_logs"
 
 create index weight_logs_user_date on weight_logs(user_id, date desc);
 
+-- ── nutrition_logs ───────────────────────────────────────
+create table if not exists nutrition_logs (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users on delete cascade not null,
+  date date not null,
+  name text not null,
+  portion text not null,
+  calories integer not null default 0,
+  protein numeric(5,1) not null default 0,
+  carbs numeric(5,1) not null default 0,
+  fat numeric(5,1) not null default 0,
+  source text not null default 'manual',  -- 'ai_photo' | 'manual' | 'common_food'
+  created_at timestamptz default now()
+);
+
+alter table nutrition_logs enable row level security;
+create policy "Users can manage own nutrition_logs"
+  on nutrition_logs for all using (auth.uid() = user_id);
+
+create index nutrition_logs_user_date on nutrition_logs(user_id, date desc);
+
 -- ── auto-create profile on signup ─────────────────────────
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer as $$

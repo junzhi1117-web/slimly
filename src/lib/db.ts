@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase, useLocalStorage } from './supabase'
-import type { DoseRecord, WeightLog, UserProfile, MedicationType, MedicationRoute } from '../types'
+import type { DoseRecord, WeightLog, UserProfile, MedicationType, MedicationRoute, NutritionEntry, NutritionSource } from '../types'
 import type { User } from '@supabase/supabase-js'
 
 // ── Legacy data migration ──────────────────────────────
@@ -239,6 +239,87 @@ export function useWeightLogs(user: User | null, refreshKey = 0) {
   return { logs, addLog, loading }
 }
 
+// ── NutritionEntry mappers ─────────────────────────────
+
+function toSnakeNutritionEntry(e: NutritionEntry, userId: string) {
+  return {
+    id: e.id,
+    user_id: userId,
+    date: e.date,
+    name: e.name,
+    portion: e.portion,
+    calories: e.calories,
+    protein: e.protein,
+    carbs: e.carbs,
+    fat: e.fat,
+    source: e.source,
+  }
+}
+
+function toCamelNutritionEntry(row: Record<string, unknown>): NutritionEntry {
+  return {
+    id: row.id as string,
+    date: row.date as string,
+    name: row.name as string,
+    portion: row.portion as string,
+    calories: row.calories as number,
+    protein: Number(row.protein),
+    carbs: Number(row.carbs),
+    fat: Number(row.fat),
+    source: (row.source as NutritionSource) ?? 'manual',
+  }
+}
+
+// ── useNutritionLogs hook ──────────────────────────────
+
+export function useNutritionLogs(user: User | null, refreshKey = 0) {
+  const [localEntries, setLocalEntries] = useLocalStorage<NutritionEntry[]>('slimly_nutrition_logs', [])
+  const [supaEntries, setSupaEntries] = useState<NutritionEntry[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!user) { setSupaEntries([]); return }
+    setLoading(true)
+    supabase
+      .from('nutrition_logs')
+      .select('*')
+      .order('date', { ascending: false })
+      .then(({ data }) => {
+        if (data) setSupaEntries(data.map(toCamelNutritionEntry))
+        setLoading(false)
+      })
+  }, [user?.id, refreshKey])
+
+  const entries = user ? supaEntries : localEntries
+
+  const addEntry = useCallback(async (entry: Omit<NutritionEntry, 'id'>) => {
+    const newEntry: NutritionEntry = { ...entry, id: crypto.randomUUID() }
+    if (user) {
+      const { error } = await supabase
+        .from('nutrition_logs')
+        .insert(toSnakeNutritionEntry(newEntry, user.id))
+      if (!error) setSupaEntries(prev => [newEntry, ...prev])
+    } else {
+      setLocalEntries(prev => [newEntry, ...prev])
+    }
+    return newEntry
+  }, [user, setLocalEntries])
+
+  const removeEntry = useCallback(async (id: string) => {
+    if (user) {
+      const { error } = await supabase
+        .from('nutrition_logs')
+        .delete()
+        .eq('id', id)
+      if (!error) setSupaEntries(prev => prev.filter(e => e.id !== id))
+    } else {
+      setLocalEntries(prev => prev.filter(e => e.id !== id))
+    }
+  }, [user, setLocalEntries])
+
+  return { entries, addEntry, removeEntry, loading }
+}
+
 // ── Sync localStorage → Supabase ───────────────────────
 
 export async function syncLocalToSupabase(userId: string) {
@@ -263,6 +344,15 @@ export async function syncLocalToSupabase(userId: string) {
     if (logs.length > 0) {
       const rows = logs.map(l => toSnakeWeightLog(l, userId))
       await supabase.from('weight_logs').upsert(rows)
+    }
+  }
+
+  const rawNutrition = localStorage.getItem('slimly_nutrition_logs')
+  if (rawNutrition) {
+    const entries: NutritionEntry[] = JSON.parse(rawNutrition)
+    if (entries.length > 0) {
+      const rows = entries.map(e => toSnakeNutritionEntry(e, userId))
+      await supabase.from('nutrition_logs').upsert(rows)
     }
   }
 }

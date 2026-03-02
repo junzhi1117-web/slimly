@@ -51,6 +51,45 @@ export interface WeightLog {
   waist?: number        // cm（選填）
 }
 
+// ── Nutrition ─────────────────────────────────────────
+
+export type NutritionSource = 'ai_photo' | 'manual' | 'common_food'
+
+export interface NutritionEntry {
+  id: string
+  date: string             // YYYY-MM-DD
+  name: string             // 食物名稱（中文）
+  portion: string          // 份量描述（例如「1份」「約150g」）
+  calories: number         // 熱量 (kcal)
+  protein: number          // 蛋白質 (g)
+  carbs: number            // 碳水化合物 (g)
+  fat: number              // 脂肪 (g)
+  source: NutritionSource  // 記錄來源
+}
+
+export interface NutritionTotals {
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+}
+
+// AI 分析食物圖片的回傳結果
+export interface AiFoodAnalysis {
+  foods: Array<{
+    name: string
+    portion: string
+    calories: number
+    protein: number
+    carbs: number
+    fat: number
+  }>
+  totalCalories: number
+  totalProtein: number
+  totalCarbs: number
+  totalFat: number
+}
+
 export interface UserProfile {
   medicationType: MedicationType
   currentDose: number
