@@ -5,9 +5,10 @@ interface BottomNavProps {
   activeTab: string
   setActiveTab: (tab: string) => void
   maintenanceMode?: boolean
+  badges?: Record<string, boolean>
 }
 
-export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab, maintenanceMode }) => {
+export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab, maintenanceMode, badges }) => {
   // 維持期：隱藏注射日記，飲食置前
   const tabs = maintenanceMode
     ? [
@@ -38,7 +39,12 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab, m
                 isActive ? 'text-[var(--color-sage)]' : 'text-[var(--color-muted)] opacity-60'
               }`}
             >
-              <Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
+              <div className="relative">
+                <Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
+                {badges?.[tab.id] && (
+                  <span className="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-[var(--color-rose)]" />
+                )}
+              </div>
               <span className="text-[9px] font-medium" style={{ letterSpacing: '0.05em' }}>{tab.label}</span>
               {isActive && (
                 <span className="absolute bottom-2 w-1 h-1 rounded-full bg-[var(--color-sage)]" />

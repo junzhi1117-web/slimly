@@ -28,6 +28,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
   const [mode, setMode] = useState<InputMode>('idle')
   const [aiResult, setAiResult] = useState<AiFoodAnalysis | null>(null)
   const [showUpgrade, setShowUpgrade] = useState(false)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
   const [usageCount, setUsageCount] = useState(() => getRemainingFreeUses())
 
   const isPremium = profile.isPremium === true
@@ -93,45 +94,38 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
 
         {/* 今日摘要卡 */}
         {mode === 'idle' && (
-          <Card variant="hero">
-            <p className="text-white/60 text-sm mb-3">今日營養</p>
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              {/* 蛋白質：主角 */}
-              <div className="bg-white/10 rounded-2xl p-3 col-span-2">
-                <p className="text-white/50 text-xs mb-1">蛋白質（今日重點）</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="stat-number text-2xl text-white">
-                    {Math.round(totals.protein)}g
-                  </span>
-                  <span className="text-white/60 text-sm">
-                    / {proteinGoal.grams}g 目標
-                  </span>
-                  <span className="ml-auto text-white/80 text-sm font-medium">
-                    {Math.min(100, Math.round(totals.protein / proteinGoal.grams * 100))}%
-                  </span>
-                </div>
-                <div className="mt-2 h-1.5 bg-white/20 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-white rounded-full transition-all duration-500"
-                    style={{ width: `${Math.min(100, totals.protein / proteinGoal.grams * 100)}%` }}
-                  />
-                </div>
+          <div className="card-elegant p-5">
+            <p className="text-eyebrow mb-4">今日營養</p>
+            {/* 蛋白質主角 */}
+            <div className="mb-4">
+              <div className="flex items-baseline gap-2 mb-2">
+                <span className="stat-display text-5xl text-[var(--color-deep)]">{Math.round(totals.protein)}</span>
+                <span className="text-[var(--color-muted)] text-base">g</span>
+                <span className="text-xs text-[var(--color-muted)] ml-1">/ {proteinGoal.grams}g 蛋白質</span>
+                <span className="ml-auto text-sm font-medium text-[var(--color-sage)]">
+                  {Math.min(100, Math.round(totals.protein / proteinGoal.grams * 100))}%
+                </span>
               </div>
-              {/* 其他三項 */}
+              <div className="h-1 bg-[var(--color-sage-light)] rounded-full overflow-hidden">
+                <div className="h-full bg-[var(--color-sage)] rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(100, totals.protein / proteinGoal.grams * 100)}%` }} />
+              </div>
+            </div>
+            <div className="divider-monet mb-4" />
+            {/* 其他三項 */}
+            <div className="grid grid-cols-3 gap-3">
               {[
                 { label: '熱量', value: Math.round(totals.calories), unit: 'kcal' },
                 { label: '碳水', value: Math.round(totals.carbs), unit: 'g' },
                 { label: '脂肪', value: Math.round(totals.fat), unit: 'g' },
               ].map(item => (
-                <div key={item.label} className="bg-white/10 rounded-2xl p-3">
-                  <p className="text-white/50 text-xs mb-1">{item.label}</p>
-                  <p className="stat-number text-lg text-white">
-                    {item.value}<span className="text-xs font-normal ml-0.5 text-white/60">{item.unit}</span>
-                  </p>
+                <div key={item.label}>
+                  <p className="text-eyebrow mb-1">{item.label}</p>
+                  <p className="stat-display text-2xl text-[var(--color-deep)]">{item.value}<span className="text-xs text-[var(--color-muted)] ml-0.5">{item.unit}</span></p>
                 </div>
               ))}
             </div>
-          </Card>
+          </div>
         )}
 
         {/* 記錄入口 */}
@@ -221,7 +215,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
                       />
                     </div>
                     <button
-                      onClick={() => onRemoveEntry(entry.id)}
+                      onClick={() => setConfirmDeleteId(entry.id)}
                       className="p-1.5 text-[var(--color-muted)] hover:text-[var(--color-rose)] transition-colors"
                     >
                       <Trash2 size={15} />
@@ -245,6 +239,24 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
         )}
 
       </main>
+
+      {/* 刪除確認 Bottom Sheet */}
+      {confirmDeleteId && (
+        <div className="fixed inset-0 z-50 flex items-end">
+          <div className="absolute inset-0 bg-black/20" onClick={() => setConfirmDeleteId(null)} />
+          <div className="relative w-full bg-[var(--color-surface)] rounded-t-3xl p-6 pb-8 space-y-3">
+            <p className="text-center font-medium text-[var(--color-deep)]">確認刪除這筆記錄？</p>
+            <button className="w-full py-3 rounded-2xl bg-[var(--color-rose-light)] text-[var(--color-rose)] font-semibold"
+              onClick={() => { onRemoveEntry(confirmDeleteId); setConfirmDeleteId(null) }}>
+              刪除
+            </button>
+            <button className="w-full py-3 rounded-2xl text-[var(--color-muted)]"
+              onClick={() => setConfirmDeleteId(null)}>
+              取消
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Premium 升級 Modal */}
       {showUpgrade && (

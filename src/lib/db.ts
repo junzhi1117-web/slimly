@@ -207,7 +207,16 @@ export function useDoseRecords(user: User | null, refreshKey = 0) {
     }
   }, [user, setLocalRecords])
 
-  return { records, addRecord, loading }
+  const removeRecord = useCallback(async (id: string) => {
+    if (user) {
+      setSupaRecords(prev => prev.filter(r => r.id !== id))
+      await supabase.from('dose_records').delete().eq('id', id).eq('user_id', user.id)
+    } else {
+      setLocalRecords(prev => prev.filter(r => r.id !== id))
+    }
+  }, [user, setLocalRecords])
+
+  return { records, addRecord, removeRecord, loading }
 }
 
 export function useWeightLogs(user: User | null, refreshKey = 0) {
@@ -242,7 +251,16 @@ export function useWeightLogs(user: User | null, refreshKey = 0) {
     }
   }, [user, setLocalLogs])
 
-  return { logs, addLog, loading }
+  const removeLog = useCallback(async (id: string) => {
+    if (user) {
+      setSupaLogs(prev => prev.filter(l => l.id !== id))
+      await supabase.from('weight_logs').delete().eq('id', id).eq('user_id', user.id)
+    } else {
+      setLocalLogs(prev => prev.filter(l => l.id !== id))
+    }
+  }, [user, setLocalLogs])
+
+  return { logs, addLog, removeLog, loading }
 }
 
 // ── NutritionEntry mappers ─────────────────────────────

@@ -6,16 +6,17 @@ import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
 import type { WeightLog, UserProfile } from '../types'
-import { Plus, TrendingDown } from 'lucide-react'
+import { Plus, TrendingDown, Trash2 } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 
 interface WeightPageProps {
   logs: WeightLog[]
   profile: UserProfile
   onAddLog: (log: Omit<WeightLog, 'id'>) => void
+  onRemoveLog: (id: string) => void
 }
 
-export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog }) => {
+export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog, onRemoveLog }) => {
   const [isAdding, setIsAdding] = useState(false)
 
   const sortedLogs = [...logs].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -69,15 +70,6 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog 
               </Card>
             </div>
 
-            {/* Chart */}
-            <Card className="p-4">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-serif text-lg">體重變化</h3>
-                <TrendingDown size={18} className="text-[var(--color-sage)]" />
-              </div>
-              <WeightChart logs={logs} />
-            </Card>
-
             <Button
               fullWidth
               className="h-14 gap-2 text-lg"
@@ -86,6 +78,15 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog 
               <Plus size={24} />
               記錄今日體重
             </Button>
+
+            {/* Chart */}
+            <Card className="p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-serif text-lg">體重變化</h3>
+                <TrendingDown size={18} className="text-[var(--color-sage)]" />
+              </div>
+              <WeightChart logs={logs} />
+            </Card>
 
             {/* History List */}
             <section>
@@ -102,8 +103,14 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog 
                         <p className="font-semibold">{format(parseISO(log.date), 'MM/dd')}</p>
                         {log.waist && <p className="text-xs text-[var(--color-muted)]">腰圍: {log.waist}cm</p>}
                       </div>
-                      <div className="text-right">
+                      <div className="flex items-center gap-3">
                         <p className="stat-number text-lg">{log.weight} <span className="text-xs font-normal text-[var(--color-muted)]">kg</span></p>
+                        <button
+                          onClick={() => onRemoveLog(log.id)}
+                          className="p-1.5 text-[var(--color-muted)] hover:text-[var(--color-rose)] transition-colors"
+                        >
+                          <Trash2 size={15} />
+                        </button>
                       </div>
                     </div>
                   ))}

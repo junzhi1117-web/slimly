@@ -23,8 +23,8 @@ function App() {
   const [refreshKey, setRefreshKey] = useState(0)
 
   const { profile, updateProfile } = useProfile(user, refreshKey)
-  const { records: doseRecords, addRecord } = useDoseRecords(user, refreshKey)
-  const { logs: weightLogs, addLog: addWeightLog } = useWeightLogs(user, refreshKey)
+  const { records: doseRecords, addRecord, removeRecord } = useDoseRecords(user, refreshKey)
+  const { logs: weightLogs, addLog: addWeightLog, removeLog: removeWeightLog } = useWeightLogs(user, refreshKey)
   const { entries: nutritionEntries, addEntry: addNutritionEntry, removeEntry: removeNutritionEntry } = useNutritionLogs(user, refreshKey)
 
   // Handle OAuth callback: if user signed in via Google and has a profile, auto-complete onboarding
@@ -66,6 +66,14 @@ function App() {
     return <OnboardingPage onComplete={handleOnboardingComplete} />
   }
 
+  const today = new Date().toISOString().split('T')[0]
+  const hasTodayLog = doseRecords.some(r => r.date === today)
+  const hasTodayWeight = weightLogs.some(w => w.date === today)
+  const badges = {
+    log: !hasTodayLog && !profile.maintenanceMode,
+    weight: !hasTodayWeight,
+  }
+
   const renderPage = () => {
     switch (activeTab) {
       case 'home':
@@ -87,6 +95,7 @@ function App() {
             logs={doseRecords}
             profile={profile}
             onAddLog={addRecord}
+            onRemoveLog={removeRecord}
           />
         )
       case 'weight':
@@ -95,6 +104,7 @@ function App() {
             logs={weightLogs}
             profile={profile}
             onAddLog={addWeightLog}
+            onRemoveLog={removeWeightLog}
           />
         )
       case 'nutrition':
@@ -124,7 +134,7 @@ function App() {
   return (
     <div className="max-w-md mx-auto bg-[var(--color-bg)] min-h-screen pb-20">
       {renderPage()}
-      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} maintenanceMode={profile.maintenanceMode} />
+      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} maintenanceMode={profile.maintenanceMode} badges={badges} />
     </div>
   )
 }

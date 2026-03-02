@@ -354,9 +354,13 @@ export const HomePage: React.FC<HomePageProps> = ({
 
       {/* Side Effect Insight */}
       {doseRecords.length >= 1 && (
-        <div className="bg-[var(--color-surface)] rounded-3xl px-4 py-3 border border-[var(--color-border)]">
+        <div
+          className="bg-[var(--color-surface)] rounded-3xl px-4 py-3 border border-[var(--color-border)] cursor-pointer"
+          onClick={() => onAction('log')}
+        >
           <p className="text-xs font-medium text-[var(--color-muted)] mb-2">副作用觀察</p>
           <SideEffectInsightCard doseRecords={doseRecords} />
+          <p className="text-[10px] text-[var(--color-sage)] mt-2 text-right">查看注射日記 →</p>
         </div>
       )}
 

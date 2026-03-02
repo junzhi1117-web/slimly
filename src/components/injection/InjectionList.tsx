@@ -3,15 +3,16 @@ import type { DoseRecord } from '../../types'
 import { MEDICATIONS, INJECTION_SITE_LABELS, SIDE_EFFECT_LABELS } from '../../lib/medications'
 import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
-import { Syringe } from 'lucide-react'
+import { Syringe, Trash2 } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
 
 interface InjectionListProps {
   logs: DoseRecord[]
+  onRemove?: (id: string) => void
 }
 
-export const InjectionList: React.FC<InjectionListProps> = ({ logs }) => {
+export const InjectionList: React.FC<InjectionListProps> = ({ logs, onRemove }) => {
   const sortedLogs = [...logs].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   if (logs.length === 0) {
@@ -56,8 +57,18 @@ export const InjectionList: React.FC<InjectionListProps> = ({ logs }) => {
                   </p>
                 )}
               </div>
-              <div className="bg-[var(--color-sage-light)] p-2 rounded-full">
-                <Syringe size={20} className="text-[var(--color-sage)]" />
+              <div className="flex items-center gap-2">
+                {onRemove && (
+                  <button
+                    onClick={() => onRemove(log.id)}
+                    className="p-1.5 text-[var(--color-muted)] hover:text-[var(--color-rose)] transition-colors"
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                )}
+                <div className="bg-[var(--color-sage-light)] p-2 rounded-full">
+                  <Syringe size={20} className="text-[var(--color-sage)]" />
+                </div>
               </div>
             </div>
           </Card>

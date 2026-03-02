@@ -123,6 +123,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
     <div className="min-h-screen bg-[var(--color-bg)] flex flex-col overflow-hidden">
       {/* Progress bar */}
       <div className="px-5 pt-12 pt-[env(safe-area-inset-top)]">
+        <p className="text-eyebrow text-right mb-2">{step + 1} / 4</p>
         <div className="flex gap-2">
           {[0, 1, 2, 3].map(i => (
             <div

@@ -85,45 +85,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
           </Card>
         </section>
 
-        {/* Account section */}
-        <section className="space-y-3">
-          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">帳號與同步</h3>
-          {user ? (
-            <Card className="p-4 space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[var(--color-sage-light)] flex items-center justify-center text-[var(--color-sage)] font-semibold text-sm">
-                  {(user.email?.[0] || '?').toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{user.email}</p>
-                  <p className="text-xs text-[var(--color-sage)]">已登入，資料雲端同步</p>
-                </div>
-              </div>
-              <button
-                onClick={signOut}
-                className="flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-rose)] transition-colors"
-              >
-                <LogOut size={16} />
-                登出
-              </button>
-            </Card>
-          ) : (
-            <Card
-              className="p-4 cursor-pointer flex items-center gap-3 transition-all active:scale-[0.98]"
-              onClick={() => setShowLogin(true)}
-            >
-              <div className="w-10 h-10 rounded-full bg-[var(--color-sage-light)] flex items-center justify-center text-[var(--color-sage)]">
-                <LogIn size={20} />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold">登入帳號</p>
-                <p className="text-xs text-[var(--color-muted)]">登入後資料會雲端同步，換機不怕遺失</p>
-              </div>
-              <ChevronRight size={18} className="text-[var(--color-muted)]" />
-            </Card>
-          )}
-        </section>
-
         {/* 停藥狀態 */}
         <section className="space-y-3">
           <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">停藥狀態</h3>
@@ -179,7 +140,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
         <section className="space-y-3">
           <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">衛教與說明</h3>
           <Card className="p-0 overflow-hidden">
-            <button className="flex justify-between items-center p-4 w-full text-left hover:bg-[var(--color-sage-light)] transition-colors">
+            <button onClick={() => window.open("/articles/dose-adjustment.html", "_blank")} className="flex justify-between items-center p-4 w-full text-left hover:bg-[var(--color-sage-light)] transition-colors">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-[var(--color-sage-light)] text-[var(--color-sage)] rounded-xl">
                   <Info size={18} />
@@ -192,7 +153,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
               <ChevronRight size={18} className="text-[var(--color-muted)]" />
             </button>
             <div className="h-px bg-[var(--color-border)] mx-4"></div>
-            <button className="flex justify-between items-center p-4 w-full text-left hover:bg-[var(--color-sage-light)] transition-colors">
+            <button onClick={() => window.open("/articles/mounjaro-side-effects.html", "_blank")} className="flex justify-between items-center p-4 w-full text-left hover:bg-[var(--color-sage-light)] transition-colors">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-[var(--color-rose-light)] text-[var(--color-rose)] rounded-xl">
                   <ShieldCheck size={18} />
@@ -205,6 +166,45 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
               <ChevronRight size={18} className="text-[var(--color-muted)]" />
             </button>
           </Card>
+        </section>
+
+        {/* 帳號與同步 */}
+        <section className="space-y-3">
+          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">帳號與同步</h3>
+          {user ? (
+            <Card className="p-4 space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[var(--color-sage-light)] flex items-center justify-center text-[var(--color-sage)] font-semibold text-sm">
+                  {(user.email?.[0] || '?').toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{user.email}</p>
+                  <p className="text-xs text-[var(--color-sage)]">已登入，資料雲端同步</p>
+                </div>
+              </div>
+              <button
+                onClick={signOut}
+                className="flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-rose)] transition-colors"
+              >
+                <LogOut size={16} />
+                登出
+              </button>
+            </Card>
+          ) : (
+            <Card
+              className="p-4 cursor-pointer flex items-center gap-3 transition-all active:scale-[0.98]"
+              onClick={() => setShowLogin(true)}
+            >
+              <div className="w-10 h-10 rounded-full bg-[var(--color-sage-light)] flex items-center justify-center text-[var(--color-sage)]">
+                <LogIn size={20} />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold">登入帳號</p>
+                <p className="text-xs text-[var(--color-muted)]">登入後資料會雲端同步，換機不怕遺失</p>
+              </div>
+              <ChevronRight size={18} className="text-[var(--color-muted)]" />
+            </Card>
+          )}
         </section>
 
         <div className="pt-4 pb-8 text-center">
