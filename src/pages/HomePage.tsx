@@ -126,12 +126,12 @@ export const HomePage: React.FC<HomePageProps> = ({ profile, doseRecords, weight
         </Card>
       </section>
 
-      {/* Side Effect Insight */}
+      {/* Side Effect Insight — inline, not a separate section */}
       {doseRecords.length >= 1 && (
-        <section>
-          <h3 className="font-serif text-lg text-[var(--color-deep)] mb-3">副作用適應</h3>
+        <div className="bg-[var(--color-surface)] rounded-3xl px-4 py-3 border border-[var(--color-border)]">
+          <p className="text-xs font-medium text-[var(--color-muted)] mb-2">副作用觀察</p>
           <SideEffectInsightCard doseRecords={doseRecords} />
-        </section>
+        </div>
       )}
 
       {/* Last Injection Preview */}
