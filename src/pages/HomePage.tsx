@@ -4,6 +4,8 @@ import { Badge } from '../components/ui/Badge'
 import { WeightChart } from '../components/weight/WeightChart'
 import { SideEffectInsightCard } from '../components/insight/SideEffectInsightCard'
 import { PostInjectionCheckInBanner, findPendingCheckIn } from '../components/insight/PostInjectionCheckInBanner'
+import { TimelineMessageCard } from '../components/insight/TimelineMessageCard'
+import { getCurrentTimelineMessage, dismissTimelineMessage } from '../lib/timelineEngine'
 import type { DoseRecord, WeightLog, UserProfile, SideEffectEntry, NutritionEntry } from '../types'
 import { MEDICATIONS, INJECTION_SITE_LABELS } from '../lib/medications'
 import { computeProteinGoal, getTodayEntries, getNutritionTotals } from '../lib/nutrition'
@@ -31,6 +33,16 @@ export const HomePage: React.FC<HomePageProps> = ({
   profile, doseRecords, weightLogs, nutritionEntries, onAction, onUpdateSideEffects
 }) => {
   const [dismissedId, setDismissedId] = useState<string | null>(null)
+  const [timelineDismissed, setTimelineDismissed] = useState(false)
+
+  const timelineMessage = !timelineDismissed
+    ? getCurrentTimelineMessage(profile, doseRecords, weightLogs)
+    : null
+
+  const handleTimelineDismiss = useCallback((id: string) => {
+    dismissTimelineMessage(id)
+    setTimelineDismissed(true)
+  }, [])
 
   const pendingRecord = (() => {
     const found = findPendingCheckIn(doseRecords)
@@ -71,6 +83,14 @@ export const HomePage: React.FC<HomePageProps> = ({
           record={pendingRecord}
           onComplete={handleCheckInComplete}
           onDismiss={() => setDismissedId(pendingRecord.id)}
+        />
+      )}
+
+      {/* Timeline contextual message */}
+      {timelineMessage && (
+        <TimelineMessageCard
+          message={timelineMessage}
+          onDismiss={handleTimelineDismiss}
         />
       )}
 
