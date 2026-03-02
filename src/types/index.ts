@@ -90,6 +90,15 @@ export interface AiFoodAnalysis {
   totalFat: number
 }
 
+// ── Food Noise ────────────────────────────────────────
+
+/** GLP-1 食慾雜音：大腦對食物的執念強度 1(完全消失)~10(無法停止) */
+export interface FoodNoiseLog {
+  id: string
+  date: string   // YYYY-MM-DD
+  level: number  // 1–10
+}
+
 export interface UserProfile {
   medicationType: MedicationType
   currentDose: number

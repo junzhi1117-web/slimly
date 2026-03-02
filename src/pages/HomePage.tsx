@@ -5,8 +5,10 @@ import { WeightChart } from '../components/weight/WeightChart'
 import { SideEffectInsightCard } from '../components/insight/SideEffectInsightCard'
 import { PostInjectionCheckInBanner, findPendingCheckIn } from '../components/insight/PostInjectionCheckInBanner'
 import { TimelineMessageCard } from '../components/insight/TimelineMessageCard'
+import { FoodNoiseSlider } from '../components/insight/FoodNoiseSlider'
+import { FoodNoiseTrendChart } from '../components/insight/FoodNoiseTrendChart'
 import { getCurrentTimelineMessage, dismissTimelineMessage } from '../lib/timelineEngine'
-import type { DoseRecord, WeightLog, UserProfile, SideEffectEntry, NutritionEntry } from '../types'
+import type { DoseRecord, WeightLog, UserProfile, SideEffectEntry, NutritionEntry, FoodNoiseLog } from '../types'
 import { MEDICATIONS, INJECTION_SITE_LABELS } from '../lib/medications'
 import { computeProteinGoal, getTodayEntries, getNutritionTotals } from '../lib/nutrition'
 import { Syringe, TrendingDown, Calendar, ChevronRight } from 'lucide-react'
@@ -18,8 +20,10 @@ interface HomePageProps {
   doseRecords: DoseRecord[]
   weightLogs: WeightLog[]
   nutritionEntries: NutritionEntry[]
+  foodNoiseLogs: FoodNoiseLog[]
   onAction: (tab: string) => void
   onUpdateSideEffects?: (id: string, sideEffects: SideEffectEntry[]) => void
+  onSaveFoodNoise: (date: string, level: number) => void
 }
 
 function getGreeting(): string {
@@ -30,7 +34,8 @@ function getGreeting(): string {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
-  profile, doseRecords, weightLogs, nutritionEntries, onAction, onUpdateSideEffects
+  profile, doseRecords, weightLogs, nutritionEntries, foodNoiseLogs,
+  onAction, onUpdateSideEffects, onSaveFoodNoise
 }) => {
   const [dismissedId, setDismissedId] = useState<string | null>(null)
   const [timelineDismissed, setTimelineDismissed] = useState(false)
@@ -211,6 +216,19 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="bg-[var(--color-surface)] rounded-3xl px-4 py-3 border border-[var(--color-border)]">
           <p className="text-xs font-medium text-[var(--color-muted)] mb-2">副作用觀察</p>
           <SideEffectInsightCard doseRecords={doseRecords} />
+        </div>
+      )}
+
+      {/* Food Noise — 僅在使用超過 3 天後顯示，或已有任何記錄 */}
+      {(differenceInDays(new Date(), parseISO(profile.startDate)) >= 3 || foodNoiseLogs.length > 0) && (
+        <div>
+          <FoodNoiseSlider logs={foodNoiseLogs} onSave={onSaveFoodNoise} />
+          {foodNoiseLogs.length >= 2 && (
+            <div className="mt-2 bg-[var(--color-surface)] rounded-3xl px-4 py-3 border border-[var(--color-border)]">
+              <p className="text-xs font-medium text-[var(--color-muted)] mb-2">食慾雜音趨勢</p>
+              <FoodNoiseTrendChart logs={foodNoiseLogs} />
+            </div>
+          )}
         </div>
       )}
 

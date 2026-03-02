@@ -9,7 +9,7 @@ import { BottomNav } from './components/layout/BottomNav'
 import { Header } from './components/layout/Header'
 import { useLocalStorage } from './lib/supabase'
 import { supabase } from './lib/supabase'
-import { useAuth, useProfile, useDoseRecords, useWeightLogs, useNutritionLogs, migrateLegacyData, syncLocalToSupabase } from './lib/db'
+import { useAuth, useProfile, useDoseRecords, useWeightLogs, useNutritionLogs, useFoodNoiseLogs, migrateLegacyData, syncLocalToSupabase } from './lib/db'
 import type { UserProfile } from './types'
 
 // Migrate old injection_logs → dose_records on first load
@@ -26,6 +26,7 @@ function App() {
   const { records: doseRecords, addRecord } = useDoseRecords(user, refreshKey)
   const { logs: weightLogs, addLog: addWeightLog } = useWeightLogs(user, refreshKey)
   const { entries: nutritionEntries, addEntry: addNutritionEntry, removeEntry: removeNutritionEntry } = useNutritionLogs(user, refreshKey)
+  const { logs: foodNoiseLogs, upsertLog: upsertFoodNoiseLog } = useFoodNoiseLogs(user, refreshKey)
 
   // Handle OAuth callback: if user signed in via Google and has a profile, auto-complete onboarding
   useEffect(() => {
@@ -77,7 +78,9 @@ function App() {
               doseRecords={doseRecords}
               weightLogs={weightLogs}
               nutritionEntries={nutritionEntries}
+              foodNoiseLogs={foodNoiseLogs}
               onAction={setActiveTab}
+              onSaveFoodNoise={upsertFoodNoiseLog}
             />
           </div>
         )

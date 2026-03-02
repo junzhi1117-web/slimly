@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase, useLocalStorage } from './supabase'
-import type { DoseRecord, WeightLog, UserProfile, MedicationType, MedicationRoute, NutritionEntry, NutritionSource } from '../types'
+import type { DoseRecord, WeightLog, UserProfile, MedicationType, MedicationRoute, NutritionEntry, NutritionSource, FoodNoiseLog } from '../types'
 import type { User } from '@supabase/supabase-js'
 
 // ── Legacy data migration ──────────────────────────────
@@ -320,6 +320,62 @@ export function useNutritionLogs(user: User | null, refreshKey = 0) {
   }, [user, setLocalEntries])
 
   return { entries, addEntry, removeEntry, loading }
+}
+
+// ── FoodNoiseLog mappers ───────────────────────────────
+
+function toSnakeFoodNoiseLog(l: FoodNoiseLog, userId: string) {
+  return { id: l.id, user_id: userId, date: l.date, level: l.level }
+}
+
+function toCamelFoodNoiseLog(row: Record<string, unknown>): FoodNoiseLog {
+  return { id: row.id as string, date: row.date as string, level: row.level as number }
+}
+
+// ── useFoodNoiseLogs hook ──────────────────────────────
+
+export function useFoodNoiseLogs(user: User | null, refreshKey = 0) {
+  const [localLogs, setLocalLogs] = useLocalStorage<FoodNoiseLog[]>('slimly_food_noise_logs', [])
+  const [supaLogs, setSupaLogs] = useState<FoodNoiseLog[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!user) { setSupaLogs([]); return }
+    setLoading(true)
+    supabase
+      .from('food_noise_logs')
+      .select('*')
+      .order('date', { ascending: false })
+      .then(({ data }) => {
+        if (data) setSupaLogs(data.map(toCamelFoodNoiseLog))
+        setLoading(false)
+      })
+  }, [user?.id, refreshKey])
+
+  const logs = user ? supaLogs : localLogs
+
+  /** 新增或更新當天記錄（upsert by date） */
+  const upsertLog = useCallback(async (date: string, level: number) => {
+    const existing = logs.find(l => l.date === date)
+    const entry: FoodNoiseLog = { id: existing?.id ?? crypto.randomUUID(), date, level }
+
+    if (user) {
+      const { error } = await supabase
+        .from('food_noise_logs')
+        .upsert(toSnakeFoodNoiseLog(entry, user.id), { onConflict: 'user_id,date' })
+      if (!error) setSupaLogs(prev => {
+        const filtered = prev.filter(l => l.date !== date)
+        return [entry, ...filtered].sort((a, b) => b.date.localeCompare(a.date))
+      })
+    } else {
+      setLocalLogs(prev => {
+        const filtered = prev.filter(l => l.date !== date)
+        return [entry, ...filtered].sort((a, b) => b.date.localeCompare(a.date))
+      })
+    }
+  }, [user, logs, setLocalLogs])
+
+  return { logs, upsertLog, loading }
 }
 
 // ── Sync localStorage → Supabase ───────────────────────
