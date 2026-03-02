@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { Card } from '../components/ui/Card'
 import { Badge } from '../components/ui/Badge'
 import { WeightChart } from '../components/weight/WeightChart'
 import { SideEffectInsightCard } from '../components/insight/SideEffectInsightCard'
-import type { DoseRecord, WeightLog, UserProfile } from '../types'
+import { PostInjectionCheckInBanner, findPendingCheckIn } from '../components/insight/PostInjectionCheckInBanner'
+import type { DoseRecord, WeightLog, UserProfile, SideEffectEntry } from '../types'
 import { MEDICATIONS, INJECTION_SITE_LABELS } from '../lib/medications'
 import { Syringe, TrendingDown, Calendar, ChevronRight } from 'lucide-react'
 import { format, parseISO, differenceInDays } from 'date-fns'
@@ -14,6 +15,7 @@ interface HomePageProps {
   doseRecords: DoseRecord[]
   weightLogs: WeightLog[]
   onAction: (tab: string) => void
+  onUpdateSideEffects?: (id: string, sideEffects: SideEffectEntry[]) => void
 }
 
 function getGreeting(): string {
@@ -23,7 +25,22 @@ function getGreeting(): string {
   return '晚安'
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ profile, doseRecords, weightLogs, onAction }) => {
+export const HomePage: React.FC<HomePageProps> = ({
+  profile, doseRecords, weightLogs, onAction, onUpdateSideEffects
+}) => {
+  const [dismissedId, setDismissedId] = useState<string | null>(null)
+
+  const pendingRecord = (() => {
+    const found = findPendingCheckIn(doseRecords)
+    if (!found || found.id === dismissedId) return null
+    return found
+  })()
+
+  const handleCheckInComplete = useCallback((id: string, sideEffects: SideEffectEntry[]) => {
+    onUpdateSideEffects?.(id, sideEffects)
+    setDismissedId(id)
+  }, [onUpdateSideEffects])
+
   const lastInjection = doseRecords.length > 0
     ? [...doseRecords].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]
     : null
@@ -46,6 +63,15 @@ export const HomePage: React.FC<HomePageProps> = ({ profile, doseRecords, weight
 
   return (
     <div className="space-y-6 pb-6">
+      {/* Post-injection check-in banner — shown 12–72h after injection */}
+      {pendingRecord && (
+        <PostInjectionCheckInBanner
+          record={pendingRecord}
+          onComplete={handleCheckInComplete}
+          onDismiss={() => setDismissedId(pendingRecord.id)}
+        />
+      )}
+
       {/* Greeting */}
       <div>
         <h2 className="text-3xl font-serif italic text-[var(--color-deep)]">
