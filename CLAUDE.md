@@ -324,14 +324,30 @@ VITE_SUPABASE_ANON_KEY=...
 - PWA（vite-plugin-pwa）
 - Supabase Edge Function（Gemini Vision）
 
-### 🔲 待實作
-- Premium 訂閱金流（RevenueCat？Stripe？）
-- PDF 報告（Premium）
-- PK 曲線（Premium）
-- 口服 GLP-1 支援（`MedicationRoute = 'oral'` 預留）
-- iOS / Android 原生 App（Capacitor 可行）
+### 🔲 待實作（優先度順序）
+
+#### 金流（Phase 2 重點）
+- **Web：Lemon Squeezy**（決策已定，複用 InkBlade 架構，Merchant of Record 處理全球稅）
+  - 複製 InkBlade `handle-webhook` Edge Function（改 CORS origins + 單一 Premium tier）
+  - Profiles DDL migration（新增 `subscription_status` / `expires_at` / `payment_provider`）
+  - 建立 `subscription_events` 表（audit log）
+  - 前端 `services/payment/lemonSqueezy.ts` + 訂閱 UI
+- **App 版（未來）：RevenueCat**（iOS/Android IAP 必須走 RC，避開 30% 抽成）
+- 定價：**149 元/月**（台幣）
+
+#### App 化（Phase 3）
+- Capacitor（React → iOS/Android），大部分程式碼可共用
+- 域名：`slimly.app`（尚未購買，俊智待辦）
+
+#### Premium 功能
+- PDF 報告
+- PK 曲線（藥物吸收曲線視覺化）
+- AI 拍照：Free 每日 3 次 → Premium 無限
+
+#### 其他
+- 口服 GLP-1 支援（`MedicationRoute = 'oral'` 已預留）
 - 劑量遞增說明頁（ProfilePage 衛教按鈕已有 UI）
-- 副作用應對指南頁（同上）
+- 副作用應對指南頁
 - 醫師共享/協作模式
 
 ---
