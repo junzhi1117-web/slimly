@@ -1,6 +1,7 @@
 // Premium 升級提示 Modal
 import React from 'react'
 import { X, Sparkles, Camera, FileText, TrendingUp, Cloud } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from './Button'
 
 interface UpgradeModalProps {
@@ -10,13 +11,15 @@ interface UpgradeModalProps {
 }
 
 const PREMIUM_FEATURES = [
-  { icon: Camera,    label: 'AI 拍照辨識食物熱量' },
-  { icon: FileText,  label: '每月診療摘要 PDF 報告' },
-  { icon: TrendingUp,label: '個人化藥代動力學曲線' },
-  { icon: Cloud,     label: '雲端同步與備份' },
-]
+  { icon: FileText, key: 'clinic_report' },
+  { icon: TrendingUp, key: 'plain_summary' },
+  { icon: Camera, key: 'continuous_tracking' },
+  { icon: Cloud, key: 'cloud_backup' },
+] as const
 
 export const UpgradeModal: React.FC<UpgradeModalProps> = ({ onClose, featureName }) => {
+  const { t } = useTranslation()
+
   return (
     <>
       {/* Backdrop */}
@@ -28,7 +31,6 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ onClose, featureName
       {/* Sheet */}
       <div className="fixed bottom-0 left-0 right-0 z-50 max-w-md mx-auto">
         <div className="bg-[var(--color-bg)] rounded-t-[2rem] p-6 pb-[max(2rem,env(safe-area-inset-bottom))]">
-
           {/* 關閉按鈕 */}
           <button
             onClick={onClose}
@@ -43,21 +45,26 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ onClose, featureName
               <Sparkles size={24} className="text-[var(--color-sage)]" />
             </div>
             <h2 className="text-xl font-serif italic text-[var(--color-deep)] mb-1">
-              {featureName ? `「${featureName}」是 Premium 功能` : '升級 Slimly Premium'}
+              {featureName
+                ? t('premium.title_feature', { feature: featureName })
+                : t('premium.title_default')}
             </h2>
             <p className="text-sm text-[var(--color-muted)]">
-              解鎖全部進階功能，更完整地陪你走完這趟旅程
+              {t('premium.subtitle')}
             </p>
           </div>
 
           {/* 功能列表 */}
           <div className="space-y-3 mb-6">
-            {PREMIUM_FEATURES.map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-3">
+            {PREMIUM_FEATURES.map(({ icon: Icon, key }) => (
+              <div key={key} className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-[var(--color-sage-light)] rounded-xl flex items-center justify-center shrink-0">
                   <Icon size={16} className="text-[var(--color-sage)]" />
                 </div>
-                <span className="text-sm text-[var(--color-deep)]">{label}</span>
+                <div>
+                  <p className="text-sm text-[var(--color-deep)] font-medium">{t(`premium.value_points.${key}.title`)}</p>
+                  <p className="text-xs text-[var(--color-muted)]">{t(`premium.value_points.${key}.desc`)}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -65,21 +72,27 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ onClose, featureName
           {/* 定價 */}
           <div className="bg-[var(--color-surface)] rounded-2xl p-4 mb-4 text-center border border-[var(--color-border)]">
             <p className="text-3xl font-semibold text-[var(--color-deep)]">
-              NT$149
-              <span className="text-base font-normal text-[var(--color-muted)] ml-1">/ 月</span>
+              {t('premium.price')}
+              <span className="text-base font-normal text-[var(--color-muted)] ml-1">{t('premium.price_unit')}</span>
             </p>
-            <p className="text-xs text-[var(--color-muted)] mt-1">隨時可取消</p>
+            <p className="text-xs text-[var(--color-muted)] mt-1">{t('premium.cancel_anytime')}</p>
           </div>
 
           {/* CTA */}
-          <Button fullWidth className="h-14 text-base mb-3">
-            立即升級 Premium
+          <Button fullWidth className="h-14 text-base mb-2">
+            {t('premium.primary_cta')}
           </Button>
+          <button
+            onClick={onClose}
+            className="w-full text-center text-sm text-[var(--color-sage)] py-2"
+          >
+            {t('premium.secondary_cta')}
+          </button>
           <button
             onClick={onClose}
             className="w-full text-center text-sm text-[var(--color-muted)] py-2"
           >
-            稍後再說
+            {t('premium.later')}
           </button>
         </div>
       </div>

@@ -34,7 +34,7 @@ export const FoodNoiseTrendChart: React.FC<FoodNoiseTrendChartProps> = ({ logs, 
   return (
     <div>
       {improving && (
-        <p className="text-[10px] text-[#5C7A74] mb-1 text-center">
+        <p className="text-[10px] text-[#24342F] mb-1 text-center">
           🌿 食慾雜音正在減少，GLP-1 發揮作用了
         </p>
       )}
@@ -45,14 +45,14 @@ export const FoodNoiseTrendChart: React.FC<FoodNoiseTrendChartProps> = ({ logs, 
               dataKey="displayDate"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: '#9BB5B0' }}
+              tick={{ fontSize: 10, fill: '#5D706A' }}
               interval="preserveStartEnd"
             />
             <YAxis
               domain={[1, 10]}
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: '#9BB5B0' }}
+              tick={{ fontSize: 10, fill: '#5D706A' }}
               ticks={[1, 5, 10]}
             />
             <ReferenceLine y={5} stroke="#E8E0D8" strokeDasharray="3 3" />

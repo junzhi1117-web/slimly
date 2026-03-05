@@ -3,10 +3,13 @@ import { Card } from '../components/ui/Card'
 import { Badge } from '../components/ui/Badge'
 import { WeightChart } from '../components/weight/WeightChart'
 import { SideEffectInsightCard } from '../components/insight/SideEffectInsightCard'
-import { PostInjectionCheckInBanner, findPendingCheckIn } from '../components/insight/PostInjectionCheckInBanner'
+import { PostInjectionCheckInBanner } from '../components/insight/PostInjectionCheckInBanner'
+import { findPendingCheckIn } from '../components/insight/findPendingCheckIn'
 import { TimelineMessageCard } from '../components/insight/TimelineMessageCard'
 import { getCurrentTimelineMessage, dismissTimelineMessage } from '../lib/timelineEngine'
 import { getMaintenanceMessage } from '../lib/maintenanceMessages'
+import { getSmartReminders } from '../lib/smartReminders'
+import { SmartRemindersCard } from '../components/insight/SmartRemindersCard'
 import type { DoseRecord, WeightLog, UserProfile, SideEffectEntry, NutritionEntry } from '../types'
 import { MEDICATIONS, INJECTION_SITE_LABELS } from '../lib/medications'
 import { computeProteinGoal, getTodayEntries, getNutritionTotals } from '../lib/nutrition'
@@ -74,6 +77,7 @@ export const HomePage: React.FC<HomePageProps> = ({
     : null
 
   const med = MEDICATIONS[profile.medicationType]
+  const smartReminders = getSmartReminders(profile, doseRecords)
 
   const daysSince = lastInjection
     ? differenceInDays(new Date(), parseISO(lastInjection.date))
@@ -99,13 +103,13 @@ export const HomePage: React.FC<HomePageProps> = ({
             {getGreeting()}
           </h2>
           <p className="text-label text-[var(--color-muted)] mt-1 flex items-center gap-1">
-            <Leaf size={13} className="text-[#5C7A74]" />
+            <Leaf size={13} className="text-[#24342F]" />
             維持期第 {maintenanceDays + 1} 天
           </p>
         </div>
 
         {/* Maintenance Hero Card */}
-        <div className="rounded-3xl p-5" style={{ backgroundColor: '#5C7A74' }}>
+        <div className="rounded-3xl p-5" style={{ backgroundColor: '#24342F' }}>
           <div className="flex justify-between items-start mb-4">
             <div>
               <p className="text-white/60 text-sm mb-1">維持期進度</p>
@@ -140,6 +144,8 @@ export const HomePage: React.FC<HomePageProps> = ({
           <TrendingDown size={20} className="text-white" />
           <span className="text-sm font-semibold text-white">記錄今日體重</span>
         </button>
+
+        <SmartRemindersCard reminders={smartReminders} onAction={onAction} />
 
         {/* Maintenance contextual message */}
         {maintenanceMessage && (
@@ -237,6 +243,8 @@ export const HomePage: React.FC<HomePageProps> = ({
           onDismiss={() => setDismissedId(pendingRecord.id)}
         />
       )}
+
+      <SmartRemindersCard reminders={smartReminders} onAction={onAction} />
 
       {/* Greeting */}
       <div>

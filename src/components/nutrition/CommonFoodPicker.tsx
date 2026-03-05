@@ -15,7 +15,8 @@ export const CommonFoodPicker: React.FC<CommonFoodPickerProps> = ({ onAdd }) => 
     setCounts(prev => {
       const next = (prev[id] ?? 0) + delta
       if (next <= 0) {
-        const { [id]: _, ...rest } = prev
+        const rest = { ...prev }
+        delete rest[id]
         return rest
       }
       return { ...prev, [id]: next }

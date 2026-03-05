@@ -145,8 +145,8 @@ export function useProfile(user: User | null, refreshKey = 0) {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!user) { setSupaProfile(null); return }
-    setLoading(true)
+    if (!user) return
+
     supabase
       .from('profiles')
       .select('*')
@@ -156,7 +156,7 @@ export function useProfile(user: User | null, refreshKey = 0) {
         if (data) setSupaProfile(toCamelProfile(data))
         setLoading(false)
       })
-  }, [user?.id, refreshKey])
+  }, [user, refreshKey])
 
   const profile = (user && supaProfile) ? supaProfile : localProfile
 
@@ -181,8 +181,8 @@ export function useDoseRecords(user: User | null, refreshKey = 0) {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!user) { setSupaRecords([]); return }
-    setLoading(true)
+    if (!user) return
+
     supabase
       .from('dose_records')
       .select('*')
@@ -191,7 +191,7 @@ export function useDoseRecords(user: User | null, refreshKey = 0) {
         if (data) setSupaRecords(data.map(toCamelDoseRecord))
         setLoading(false)
       })
-  }, [user?.id, refreshKey])
+  }, [user, refreshKey])
 
   const records = user ? supaRecords : localRecords
 
@@ -225,8 +225,8 @@ export function useWeightLogs(user: User | null, refreshKey = 0) {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!user) { setSupaLogs([]); return }
-    setLoading(true)
+    if (!user) return
+
     supabase
       .from('weight_logs')
       .select('*')
@@ -235,7 +235,7 @@ export function useWeightLogs(user: User | null, refreshKey = 0) {
         if (data) setSupaLogs(data.map(toCamelWeightLog))
         setLoading(false)
       })
-  }, [user?.id, refreshKey])
+  }, [user, refreshKey])
 
   const logs = user ? supaLogs : localLogs
 
@@ -302,8 +302,8 @@ export function useNutritionLogs(user: User | null, refreshKey = 0) {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!user) { setSupaEntries([]); return }
-    setLoading(true)
+    if (!user) return
+
     supabase
       .from('nutrition_logs')
       .select('*')
@@ -312,7 +312,7 @@ export function useNutritionLogs(user: User | null, refreshKey = 0) {
         if (data) setSupaEntries(data.map(toCamelNutritionEntry))
         setLoading(false)
       })
-  }, [user?.id, refreshKey])
+  }, [user, refreshKey])
 
   const entries = user ? supaEntries : localEntries
 
@@ -362,8 +362,8 @@ export function useFoodNoiseLogs(user: User | null, refreshKey = 0) {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!user) { setSupaLogs([]); return }
-    setLoading(true)
+    if (!user) return
+
     supabase
       .from('food_noise_logs')
       .select('*')
@@ -372,7 +372,7 @@ export function useFoodNoiseLogs(user: User | null, refreshKey = 0) {
         if (data) setSupaLogs(data.map(toCamelFoodNoiseLog))
         setLoading(false)
       })
-  }, [user?.id, refreshKey])
+  }, [user, refreshKey])
 
   const logs = user ? supaLogs : localLogs
 

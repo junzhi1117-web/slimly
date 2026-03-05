@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import type { DoseRecord, SideEffectEntry, SideEffectType } from '../../types'
 import { MEDICATIONS, INJECTION_SITE_LABELS } from '../../lib/medications'
 import { X } from 'lucide-react'
-import { differenceInHours, parseISO, format } from 'date-fns'
+import { differenceInHours, format, parseISO } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
 
 const SYMPTOM_LIST: { type: SideEffectType; label: string }[] = [
@@ -16,19 +16,6 @@ const SYMPTOM_LIST: { type: SideEffectType; label: string }[] = [
   { type: 'other',         label: '其他' },
 ]
 
-// 12–72 小時內、沒有副作用記錄的注射
-export function findPendingCheckIn(logs: DoseRecord[]): DoseRecord | null {
-  const now = new Date()
-  return (
-    [...logs]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .find(r => {
-        const hours = differenceInHours(now, parseISO(r.date))
-        const hasSE = (r.sideEffects ?? []).length > 0
-        return hours >= 12 && hours <= 72 && !hasSE
-      }) ?? null
-  )
-}
 
 interface PostInjectionCheckInBannerProps {
   record: DoseRecord
@@ -56,7 +43,11 @@ export const PostInjectionCheckInBanner: React.FC<PostInjectionCheckInBannerProp
   const toggleSymptom = (type: SideEffectType) => {
     setSelectedTypes(prev => {
       const next = new Set(prev)
-      next.has(type) ? next.delete(type) : next.add(type)
+      if (next.has(type)) {
+        next.delete(type)
+      } else {
+        next.add(type)
+      }
       return next
     })
   }

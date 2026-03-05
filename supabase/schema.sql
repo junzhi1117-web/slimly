@@ -78,6 +78,26 @@ create policy "Users can manage own nutrition_logs"
 
 create index nutrition_logs_user_date on nutrition_logs(user_id, date desc);
 
+-- ── analytics_events ─────────────────────────────────────
+create table if not exists analytics_events (
+  id bigint generated always as identity primary key,
+  user_id uuid references auth.users on delete cascade not null,
+  event_name text not null,
+  session_id text not null,
+  event_at timestamptz not null,
+  payload jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+alter table analytics_events enable row level security;
+create policy "Users can insert own analytics_events"
+  on analytics_events for insert with check (auth.uid() = user_id);
+create policy "Users can read own analytics_events"
+  on analytics_events for select using (auth.uid() = user_id);
+
+create index analytics_events_user_event_at on analytics_events(user_id, event_at desc);
+create index analytics_events_event_name on analytics_events(event_name);
+
 -- ── auto-create profile on signup ─────────────────────────
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer as $$

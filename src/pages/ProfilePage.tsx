@@ -91,7 +91,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
           <Card className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-xl ${profile.maintenanceMode ? 'bg-[#EFF6F4] text-[#5C7A74]' : 'bg-[var(--color-sage-light)] text-[var(--color-sage)]'}`}>
+                <div className={`p-2 rounded-xl ${profile.maintenanceMode ? 'bg-[#EFF6F4] text-[#24342F]' : 'bg-[var(--color-sage-light)] text-[var(--color-sage)]'}`}>
                   <Leaf size={18} />
                 </div>
                 <div>
@@ -118,7 +118,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
                   }
                 }}
                 className={`relative inline-flex w-12 h-6 rounded-full transition-colors duration-200 focus:outline-none ${
-                  profile.maintenanceMode ? 'bg-[#5C7A74]' : 'bg-[var(--color-border)]'
+                  profile.maintenanceMode ? 'bg-[#24342F]' : 'bg-[var(--color-border)]'
                 }`}
                 style={{ minWidth: '48px' }}
               >

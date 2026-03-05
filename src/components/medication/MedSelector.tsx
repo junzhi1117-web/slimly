@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import type { MedicationType } from '../../types'
 import { MEDICATIONS } from '../../lib/medications'
 import { Card } from '../ui/Card'
@@ -10,6 +11,7 @@ interface MedSelectorProps {
 }
 
 export const MedSelector: React.FC<MedSelectorProps> = ({ selected, onSelect }) => {
+  const { t } = useTranslation()
   const options = Object.values(MEDICATIONS)
 
   return (
@@ -26,10 +28,10 @@ export const MedSelector: React.FC<MedSelectorProps> = ({ selected, onSelect }) 
         >
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="font-semibold text-lg">{med.name}</h3>
+              <h3 className="font-semibold text-lg">{t('med.' + med.id)}</h3>
               <p className="text-sm text-[var(--color-muted)]">{med.brandName} · {med.manufacturer}</p>
               <p className="text-xs text-[var(--color-muted)] mt-1">
-                {med.frequency === 'weekly' ? '每週注射' : '每日注射'}
+                {t(med.frequency === 'weekly' ? 'med.weekly' : 'med.daily')}
               </p>
             </div>
             <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { MedicationType, InjectionSite, DoseRecord } from '../../types'
-import { MEDICATIONS, INJECTION_SITE_LABELS } from '../../lib/medications'
+import { MEDICATIONS } from '../../lib/medications'
 import { Button } from '../ui/Button'
 import { Check } from 'lucide-react'
 
@@ -12,6 +13,12 @@ const SITE_EMOJI: Record<InjectionSite, string> = {
   'arm-left': '💪←',
   'arm-right': '💪→',
 }
+
+const SITE_KEYS: InjectionSite[] = [
+  'abdomen-left', 'abdomen-right',
+  'thigh-left', 'thigh-right',
+  'arm-left', 'arm-right',
+]
 
 interface InjectionFormProps {
   medicationType: MedicationType
@@ -28,6 +35,7 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
   suggestedSite = 'abdomen-left',
   currentDose
 }) => {
+  const { t } = useTranslation()
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
   const [dose, setDose] = useState(currentDose)
   const [site, setSite] = useState<InjectionSite>(suggestedSite)
@@ -52,7 +60,7 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
     <form onSubmit={handleSubmit} className="space-y-6 pb-20">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">注射日期</label>
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">{t('injection.date_label')}</label>
           <input
             type="date"
             value={date}
@@ -62,7 +70,7 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">劑量 ({med.unit})</label>
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">{t('injection.dose_label', { unit: med.unit })}</label>
           <div className="grid grid-cols-3 gap-2">
             {med.doses.map(d => (
               <button
@@ -82,12 +90,12 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">注射部位</label>
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">{t('injection.site_label')}</label>
           <p className="text-xs text-[var(--color-muted)] mb-2">
-            建議部位：<span className="text-[var(--color-sage)] font-medium">{INJECTION_SITE_LABELS[suggestedSite]}</span>（自動輪換）
+            {t('injection.suggested_site')}<span className="text-[var(--color-sage)] font-medium">{t('injection_site.' + suggestedSite)}</span>{t('injection.auto_rotate')}
           </p>
           <div className="grid grid-cols-2 gap-2">
-            {(Object.keys(INJECTION_SITE_LABELS) as InjectionSite[]).map(s => (
+            {SITE_KEYS.map(s => (
               <button
                 key={s}
                 type="button"
@@ -99,7 +107,7 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
                 }`}
               >
                 <span className="text-base">{SITE_EMOJI[s]}</span>
-                <span className="flex-1 text-left">{INJECTION_SITE_LABELS[s]}</span>
+                <span className="flex-1 text-left">{t('injection_site.' + s)}</span>
                 {site === s && <Check size={16} className="text-[var(--color-sage)]" />}
               </button>
             ))}
@@ -107,19 +115,19 @@ export const InjectionForm: React.FC<InjectionFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">備註（選填）</label>
+          <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">{t('injection.notes_label')}</label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="記錄心情或特別狀況..."
+            placeholder={t('injection.notes_placeholder')}
             className="input-monet h-20 resize-none"
           />
         </div>
       </div>
 
       <div className="flex gap-3">
-        <Button type="button" variant="outline" fullWidth onClick={onCancel}>取消</Button>
-        <Button type="submit" variant="primary" fullWidth>儲存 →</Button>
+        <Button type="button" variant="outline" fullWidth onClick={onCancel}>{t('common.cancel')}</Button>
+        <Button type="submit" variant="primary" fullWidth>{t('injection.save')}</Button>
       </div>
     </form>
   )

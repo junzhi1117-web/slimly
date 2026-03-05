@@ -3,6 +3,7 @@ import { HomePage } from './pages/HomePage'
 import { LogPage } from './pages/LogPage'
 import { WeightPage } from './pages/WeightPage'
 import { NutritionPage } from './pages/NutritionPage'
+import { ReportPage } from './pages/ReportPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { OnboardingPage } from './pages/OnboardingPage'
 import { BottomNav } from './components/layout/BottomNav'
@@ -115,6 +116,15 @@ function App() {
             weightLogs={weightLogs}
             onAddEntry={addNutritionEntry}
             onRemoveEntry={removeNutritionEntry}
+          />
+        )
+      case 'report':
+        return (
+          <ReportPage
+            profile={profile}
+            doseRecords={doseRecords}
+            weightLogs={weightLogs}
+            userId={user?.id}
           />
         )
       case 'profile':

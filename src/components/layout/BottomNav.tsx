@@ -1,5 +1,6 @@
 import React from 'react'
-import { Home, Syringe, Scale, Apple, User } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { Home, Syringe, Scale, Apple, User, FileText } from 'lucide-react'
 
 interface BottomNavProps {
   activeTab: string
@@ -9,20 +10,23 @@ interface BottomNavProps {
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab, maintenanceMode, badges }) => {
+  const { t } = useTranslation()
+
   // 維持期：隱藏注射日記，飲食置前
   const tabs = maintenanceMode
     ? [
-        { id: 'home',      label: '首頁', icon: Home },
-        { id: 'nutrition', label: '飲食', icon: Apple },
-        { id: 'weight',    label: '體重', icon: Scale },
-        { id: 'profile',   label: '我',   icon: User },
+        { id: 'home',      label: t('nav.home'), icon: Home },
+        { id: 'nutrition', label: t('nav.nutrition'), icon: Apple },
+        { id: 'weight',    label: t('nav.weight'), icon: Scale },
+        { id: 'profile',   label: t('nav.profile'), icon: User },
       ]
     : [
-        { id: 'home',      label: '首頁', icon: Home },
-        { id: 'log',       label: '注射', icon: Syringe },
-        { id: 'weight',    label: '體重', icon: Scale },
-        { id: 'nutrition', label: '飲食', icon: Apple },
-        { id: 'profile',   label: '我',   icon: User },
+        { id: 'home',      label: t('nav.home'), icon: Home },
+        { id: 'log',       label: t('nav.log'), icon: Syringe },
+        { id: 'weight',    label: t('nav.weight'), icon: Scale },
+        { id: 'report',    label: t('nav.report'), icon: FileText },
+        { id: 'nutrition', label: t('nav.nutrition'), icon: Apple },
+        { id: 'profile',   label: t('nav.profile'), icon: User },
       ]
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import type { FoodNoiseLog } from '../../types'
 
 interface FoodNoiseSliderProps {
@@ -7,8 +7,8 @@ interface FoodNoiseSliderProps {
 }
 
 const LEVEL_LABELS: Record<number, { emoji: string; label: string; color: string }> = {
-  1:  { emoji: '😌', label: '完全安靜', color: '#5C7A74' },
-  2:  { emoji: '😌', label: '幾乎沒有', color: '#5C7A74' },
+  1:  { emoji: '😌', label: '完全安靜', color: '#24342F' },
+  2:  { emoji: '😌', label: '幾乎沒有', color: '#24342F' },
   3:  { emoji: '🙂', label: '偶爾浮現', color: '#8FBCB0' },
   4:  { emoji: '🙂', label: '偶爾浮現', color: '#8FBCB0' },
   5:  { emoji: '😐', label: '有些想法', color: '#B0A090' },
@@ -39,14 +39,6 @@ export const FoodNoiseSlider: React.FC<FoodNoiseSliderProps> = ({ logs, onSave }
   const [saved, setSaved] = useState<boolean>(!!todayLog)
   const [showSaveHint, setShowSaveHint] = useState(false)
 
-  // Sync when todayLog changes externally
-  useEffect(() => {
-    if (todayLog) {
-      setLevel(todayLog.level)
-      setSaved(true)
-    }
-  }, [todayLog?.level])
-
   const handleSave = () => {
     onSave(today, level)
     setSaved(true)
@@ -66,7 +58,7 @@ export const FoodNoiseSlider: React.FC<FoodNoiseSliderProps> = ({ logs, onSave }
           <p className="text-[10px] text-[var(--color-muted)] opacity-70 mt-0.5">大腦對食物的執念強度</p>
         </div>
         {saved && diff !== null && diff > 0.5 && (
-          <span className="text-xs font-medium text-[#5C7A74] bg-[#EFF6F4] rounded-full px-2 py-0.5">
+          <span className="text-xs font-medium text-[#24342F] bg-[#EFF6F4] rounded-full px-2 py-0.5">
             ↓ 比上週低 {diff} 分
           </span>
         )}
@@ -85,7 +77,7 @@ export const FoodNoiseSlider: React.FC<FoodNoiseSliderProps> = ({ logs, onSave }
           <p className="text-xs text-[var(--color-muted)]">今日 {level} / 10</p>
         </div>
         {showSaveHint && (
-          <span className="ml-auto text-xs text-[#5C7A74] animate-pulse">已記錄 ✓</span>
+          <span className="ml-auto text-xs text-[#24342F] animate-pulse">已記錄 ✓</span>
         )}
       </div>
 

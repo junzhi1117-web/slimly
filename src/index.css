@@ -9,9 +9,9 @@
   --color-rose-light: rgba(201, 160, 168, 0.12);
   --color-gold: #E8D5B8;
   --color-gold-light: rgba(232, 213, 184, 0.15);
-  --color-deep: #5C7A74;
-  --color-muted: #9BB5B0;
-  --color-border: rgba(143, 188, 176, 0.2);
+  --color-deep: #24342F;
+  --color-muted: #5D706A;
+  --color-border: rgba(143, 188, 176, 0.28);
 
   --font-sans: "Noto Sans TC", sans-serif;
   --font-serif: "Cormorant Garamond", "Noto Serif TC", serif;
@@ -73,7 +73,7 @@ input, button, select, textarea {
 }
 
 .card-hero {
-  background: #5C7A74;
+  background: #24342F;
   color: white;
   border-radius: 24px;
   box-shadow:

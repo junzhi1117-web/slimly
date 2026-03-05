@@ -37,13 +37,13 @@ export const WeightChart: React.FC<WeightChartProps> = ({ logs, height = 300 }) 
             dataKey="displayDate"
             axisLine={false}
             tickLine={false}
-            tick={{ fontSize: 12, fill: '#9BB5B0' }}
+            tick={{ fontSize: 12, fill: '#5D706A' }}
           />
           <YAxis
             domain={[minWeight, maxWeight]}
             axisLine={false}
             tickLine={false}
-            tick={{ fontSize: 12, fill: '#9BB5B0' }}
+            tick={{ fontSize: 12, fill: '#5D706A' }}
           />
           <Tooltip
             contentStyle={{
@@ -52,15 +52,15 @@ export const WeightChart: React.FC<WeightChartProps> = ({ logs, height = 300 }) 
               boxShadow: '0 4px 20px rgba(143,188,176,0.15)',
               background: '#FFFFFF',
             }}
-            labelStyle={{ fontWeight: 600, marginBottom: '4px', color: '#5C7A74' }}
+            labelStyle={{ fontWeight: 600, marginBottom: '4px', color: '#24342F' }}
           />
           <Line
             type="monotone"
             dataKey="weight"
-            stroke="#5C7A74"
+            stroke="#24342F"
             strokeWidth={1.5}
-            dot={{ r: 3, fill: '#5C7A74', strokeWidth: 1.5, stroke: '#fff' }}
-            activeDot={{ r: 5, fill: '#5C7A74' }}
+            dot={{ r: 3, fill: '#24342F', strokeWidth: 1.5, stroke: '#fff' }}
+            activeDot={{ r: 5, fill: '#24342F' }}
           />
         </LineChart>
       </ResponsiveContainer>

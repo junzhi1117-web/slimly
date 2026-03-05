@@ -30,14 +30,14 @@ export const TimelineMessageCard: React.FC<TimelineMessageCardProps> = ({
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3
             className="text-base font-semibold leading-snug flex-1"
-            style={{ color: '#5C7A74', fontFamily: '"Noto Serif TC", serif' }}
+            style={{ color: '#24342F', fontFamily: '"Noto Serif TC", serif' }}
           >
             {message.title}
           </h3>
           <button
             onClick={() => onDismiss(message.id)}
             className="flex-shrink-0 rounded-full p-1 transition-colors"
-            style={{ color: '#5C7A74' }}
+            style={{ color: '#24342F' }}
             aria-label="關閉"
           >
             <X size={16} />

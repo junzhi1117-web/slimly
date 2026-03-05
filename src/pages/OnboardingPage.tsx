@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { MEDICATIONS, WEEKDAY_LABELS } from '../lib/medications'
+import { MEDICATIONS } from '../lib/medications'
 import { signUpWithEmail, signInWithGoogle, supabase } from '../lib/supabase'
 import { toSnakeProfile } from '../lib/db'
 import type { MedicationType, UserProfile } from '../types'
@@ -12,6 +13,7 @@ interface OnboardingPageProps {
 }
 
 export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) => {
+  const { t } = useTranslation()
   const [step, setStep] = useState(0)
 
   // If user returns from Google OAuth during onboarding, jump to step 4 (account step)
@@ -52,6 +54,8 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState('')
   const [authLoading, setAuthLoading] = useState(false)
+
+  const weekdayLabels = t('weekday', { returnObjects: true }) as string[]
 
   const handleMedChange = (type: MedicationType) => {
     setMedType(type)
@@ -123,7 +127,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
     <div className="min-h-screen bg-[var(--color-bg)] flex flex-col overflow-hidden">
       {/* Progress bar */}
       <div className="px-5 pt-12 pt-[env(safe-area-inset-top)]">
-        <p className="text-eyebrow text-right mb-2">{step + 1} / 4</p>
+        <p className="text-eyebrow text-right mb-2">{t('onboarding.step_counter', { current: step + 1, total: 4 })}</p>
         <div className="flex gap-2">
           {[0, 1, 2, 3].map(i => (
             <div
@@ -145,10 +149,10 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           {/* Step 1 — 選藥物 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
             <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
-              你使用哪種藥物？
+              {t('onboarding.step1_title')}
             </h1>
             <p className="text-eyebrow mt-3 mb-8">
-              選擇你正在使用的處方減重藥
+              {t('onboarding.step1_desc')}
             </p>
 
             <div className="space-y-3">
@@ -167,9 +171,9 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
                   >
                     <div className="flex justify-between items-center min-h-[72px]">
                       <div>
-                        <h3 className="text-lg font-medium">{m.name}</h3>
+                        <h3 className="text-lg font-medium">{t('med.' + type)}</h3>
                         <p className="text-eyebrow">
-                          {m.brandName} · {m.frequency === 'weekly' ? '每週注射' : '每日注射'}
+                          {m.brandName} · {t(m.frequency === 'weekly' ? 'med.weekly' : 'med.daily')}
                         </p>
                       </div>
                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
@@ -189,17 +193,17 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           {/* Step 2 — 劑量與時間 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
             <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
-              設定你的劑量與時間
+              {t('onboarding.step2_title')}
             </h1>
             <p className="text-eyebrow mt-3 mb-8">
-              你可以隨時在設定中調整
+              {t('onboarding.step2_desc')}
             </p>
 
             <div className="space-y-6">
               {/* Dose */}
               <div>
                 <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">
-                  目前劑量 ({med.unit})
+                  {t('onboarding.dose_label', { unit: med.unit })}
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {med.doses.map(d => (
@@ -222,11 +226,11 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
               {/* Injection day */}
               <div>
                 <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">
-                  {med.frequency === 'weekly' ? '每週注射日' : '注射頻率'}
+                  {med.frequency === 'weekly' ? t('onboarding.injection_day_weekly') : t('onboarding.injection_day_daily')}
                 </label>
                 {med.frequency === 'weekly' ? (
                   <div className="grid grid-cols-7 gap-1.5">
-                    {WEEKDAY_LABELS.map((label, i) => (
+                    {weekdayLabels.map((label, i) => (
                       <button
                         key={i}
                         type="button"
@@ -243,7 +247,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
                   </div>
                 ) : (
                   <Card className="text-center py-3 text-[var(--color-sage)] font-medium">
-                    每天
+                    {t('onboarding.every_day')}
                   </Card>
                 )}
               </div>
@@ -251,7 +255,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
               {/* Start date */}
               <div>
                 <label className="block text-sm font-medium text-[var(--color-muted)] mb-2">
-                  開始日期
+                  {t('onboarding.start_date')}
                 </label>
                 <input
                   type="date"
@@ -266,51 +270,51 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           {/* Step 3 — 體重目標 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
             <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
-              設定你的體重目標
+              {t('onboarding.step3_title')}
             </h1>
             <p className="text-eyebrow mt-3 mb-8">
-              目標體重和身高為選填，方便追蹤進度
+              {t('onboarding.step3_desc')}
             </p>
 
             <div className="space-y-5">
               <div>
                 <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">
-                  目前體重 (kg)
+                  {t('onboarding.current_weight')}
                 </label>
                 <input
                   type="number"
                   step="0.1"
                   value={currentWeight}
                   onChange={(e) => setCurrentWeight(e.target.value)}
-                  placeholder="例如 75.0"
+                  placeholder={t('onboarding.current_weight_placeholder')}
                   className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-sage)] outline-none text-xl font-semibold"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">
-                  目標體重 (kg，選填)
+                  {t('onboarding.target_weight')}
                 </label>
                 <input
                   type="number"
                   step="0.1"
                   value={targetWeight}
                   onChange={(e) => setTargetWeight(e.target.value)}
-                  placeholder="例如 65.0"
+                  placeholder={t('onboarding.target_weight_placeholder')}
                   className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-sage)] outline-none text-xl font-semibold"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-[var(--color-muted)] mb-1">
-                  身高 (cm，選填)
+                  {t('onboarding.height')}
                 </label>
                 <input
                   type="number"
                   step="0.1"
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
-                  placeholder="例如 170"
+                  placeholder={t('onboarding.height_placeholder')}
                   className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-sage)] outline-none"
                 />
               </div>
@@ -320,10 +324,10 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
           {/* Step 4 — 建立帳號 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
             <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
-              建立帳號，安全保存
+              {t('onboarding.step4_title')}
             </h1>
             <p className="text-eyebrow mt-3 mb-8">
-              登入後資料會雲端同步，也可以稍後再說
+              {t('onboarding.step4_desc')}
             </p>
 
             <div className="space-y-4">
@@ -339,12 +343,12 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
-                <span className="font-medium">使用 Google 登入</span>
+                <span className="font-medium">{t('onboarding.google_login')}</span>
               </button>
 
               <div className="flex items-center gap-3 my-2">
                 <div className="flex-1 h-px bg-[var(--color-border)]" />
-                <span className="text-xs text-[var(--color-muted)]">或使用 Email</span>
+                <span className="text-xs text-[var(--color-muted)]">{t('onboarding.or_email')}</span>
                 <div className="flex-1 h-px bg-[var(--color-border)]" />
               </div>
 
@@ -354,14 +358,14 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="電子信箱"
+                  placeholder={t('onboarding.email_placeholder')}
                   className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-sage)] outline-none"
                 />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="密碼（至少 6 位）"
+                  placeholder={t('onboarding.password_placeholder')}
                   className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl px-4 py-3 focus:ring-2 focus:ring-[var(--color-sage)] outline-none"
                 />
                 {authError && (
@@ -374,7 +378,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
                   className="gap-2"
                 >
                   <Mail size={18} />
-                  建立帳號
+                  {t('onboarding.create_account')}
                 </Button>
               </div>
 
@@ -383,7 +387,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
                   onClick={handleFinish}
                   className="w-full text-center text-sm text-[var(--color-muted)] py-3 hover:text-[var(--color-deep)] transition-colors"
                 >
-                  先試用，稍後再登入
+                  {t('onboarding.skip_login')}
                 </button>
               </div>
             </div>
@@ -404,7 +408,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
             onClick={next}
             disabled={!canGoNext()}
           >
-            繼續
+            {t('onboarding.continue')}
             <ChevronRight size={18} />
           </button>
         ) : (
