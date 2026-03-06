@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Header } from '../components/layout/Header'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
@@ -17,16 +18,25 @@ interface ProfilePageProps {
 }
 
 export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfile, user, onLoginSync }) => {
+  const { t, i18n } = useTranslation()
   const med = MEDICATIONS[profile.medicationType]
   const [showLogin, setShowLogin] = useState(false)
 
+  const language = i18n.resolvedLanguage === 'en' ? 'en' : 'zh-TW'
+
+  const handleLanguageChange = async (next: 'zh-TW' | 'en') => {
+    await i18n.changeLanguage(next)
+    localStorage.setItem('slimly_lang', next)
+    document.documentElement.lang = next
+  }
+
   return (
     <div className="min-h-screen bg-[var(--color-bg)] pb-24">
-      <Header title="我的設定" />
+      <Header title={t('profile.title')} />
 
       <main className="p-4 space-y-6">
         <section className="space-y-3">
-          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">目前使用藥物</h3>
+          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">{t('profile.current_med')}</h3>
           <MedSelector
             selected={profile.medicationType}
             onSelect={(type) => onUpdateProfile({ medicationType: type as MedicationType })}
@@ -34,10 +44,10 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
         </section>
 
         <section className="space-y-3">
-          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">個人進度與目標</h3>
+          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">{t('profile.progress')}</h3>
           <Card className="divide-y divide-[var(--color-border)] p-0">
             <div className="flex justify-between items-center p-4">
-              <span className="text-sm font-medium">開始日期</span>
+              <span className="text-sm font-medium">{t('profile.start_date')}</span>
               <input
                 type="date"
                 value={profile.startDate}
@@ -46,7 +56,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
               />
             </div>
             <div className="flex justify-between items-center p-4">
-              <span className="text-sm font-medium">起始體重</span>
+              <span className="text-sm font-medium">{t('profile.start_weight')}</span>
               <div className="flex items-center gap-1">
                 <input
                   type="number"
@@ -58,20 +68,20 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
               </div>
             </div>
             <div className="flex justify-between items-center p-4">
-              <span className="text-sm font-medium">目標體重</span>
+              <span className="text-sm font-medium">{t('profile.target_weight')}</span>
               <div className="flex items-center gap-1">
                 <input
                   type="number"
                   value={profile.targetWeight || ''}
                   onChange={(e) => onUpdateProfile({ targetWeight: parseFloat(e.target.value) })}
-                  placeholder="未設定"
+                  placeholder={t('profile.target_weight_unset')}
                   className="text-sm text-[var(--color-sage)] font-semibold bg-transparent outline-none text-right w-16"
                 />
                 <span className="text-xs text-[var(--color-muted)]">kg</span>
               </div>
             </div>
             <div className="flex justify-between items-center p-4">
-              <span className="text-sm font-medium">目前劑量</span>
+              <span className="text-sm font-medium">{t('profile.current_dose')}</span>
               <select
                 value={profile.currentDose}
                 onChange={(e) => onUpdateProfile({ currentDose: parseFloat(e.target.value) })}
@@ -85,9 +95,39 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
           </Card>
         </section>
 
+        <section className="space-y-3">
+          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">{t('profile.language')}</h3>
+          <Card className="p-2">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('zh-TW')}
+                className={`h-10 rounded-xl text-sm font-medium transition-colors ${
+                  language === 'zh-TW'
+                    ? 'bg-[var(--color-sage)] text-white'
+                    : 'bg-[var(--color-surface)] text-[var(--color-muted)]'
+                }`}
+              >
+                繁體中文
+              </button>
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('en')}
+                className={`h-10 rounded-xl text-sm font-medium transition-colors ${
+                  language === 'en'
+                    ? 'bg-[var(--color-sage)] text-white'
+                    : 'bg-[var(--color-surface)] text-[var(--color-muted)]'
+                }`}
+              >
+                English
+              </button>
+            </div>
+          </Card>
+        </section>
+
         {/* 停藥狀態 */}
         <section className="space-y-3">
-          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">停藥狀態</h3>
+          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">{t('profile.maintenance_label')}</h3>
           <Card className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -96,12 +136,12 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
                 </div>
                 <div>
                   <p className="text-sm font-semibold">
-                    {profile.maintenanceMode ? '維持期模式' : '用藥中'}
+                    {profile.maintenanceMode ? t('profile.maintenance_mode_label') : t('profile.on_medication')}
                   </p>
                   <p className="text-xs text-[var(--color-muted)]">
                     {profile.maintenanceMode
-                      ? `停藥日期：${profile.maintenanceStartDate ?? '未記錄'}`
-                      : '已停藥？開啟維持期模式'}
+                      ? t('profile.maintenance_stop_date', { date: profile.maintenanceStartDate ?? t('profile.maintenance_not_recorded') })
+                      : t('profile.stop_med_prompt')}
                   </p>
                 </div>
               </div>
@@ -131,14 +171,14 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
             </div>
             {profile.maintenanceMode && (
               <p className="text-xs text-[var(--color-muted)] mt-3 leading-relaxed">
-                🌱 維持期模式已開啟。注射日記已隱藏，飲食記錄置前，首頁訊息換成維持期衛教陪伴。
+                {t('profile.maintenance_tip')}
               </p>
             )}
           </Card>
         </section>
 
         <section className="space-y-3">
-          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">衛教與說明</h3>
+          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">{t('profile.education')}</h3>
           <Card className="p-0 overflow-hidden">
             <a href="/articles/dose-adjustment.html" target="_blank" rel="noopener noreferrer" className="flex justify-between items-center p-4 w-full text-left hover:bg-[var(--color-sage-light)] transition-colors">
               <div className="flex items-center gap-3">
@@ -146,8 +186,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
                   <Info size={18} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold">劑量遞增說明</p>
-                  <p className="text-xs text-[var(--color-muted)]">了解如何安全地增加劑量</p>
+                  <p className="text-sm font-semibold">{t('profile.dose_adjustment')}</p>
+                  <p className="text-xs text-[var(--color-muted)]">{t('profile.dose_adjustment_desc')}</p>
                 </div>
               </div>
               <ChevronRight size={18} className="text-[var(--color-muted)]" />
@@ -159,8 +199,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
                   <ShieldCheck size={18} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold">副作用應對指南</p>
-                  <p className="text-xs text-[var(--color-muted)]">改善噁心、便秘等不適</p>
+                  <p className="text-sm font-semibold">{t('profile.side_effect_guide')}</p>
+                  <p className="text-xs text-[var(--color-muted)]">{t('profile.side_effect_guide_desc')}</p>
                 </div>
               </div>
               <ChevronRight size={18} className="text-[var(--color-muted)]" />
@@ -170,7 +210,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
 
         {/* 帳號與同步 */}
         <section className="space-y-3">
-          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">帳號與同步</h3>
+          <h3 className="font-medium text-[var(--color-muted)] text-sm px-1">{t('profile.account')}</h3>
           {user ? (
             <Card className="p-4 space-y-3">
               <div className="flex items-center gap-3">
@@ -179,7 +219,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{user.email}</p>
-                  <p className="text-xs text-[var(--color-sage)]">已登入，資料雲端同步</p>
+                  <p className="text-xs text-[var(--color-sage)]">{t('profile.logged_in_sync')}</p>
                 </div>
               </div>
               <button
@@ -187,7 +227,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
                 className="flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-rose)] transition-colors"
               >
                 <LogOut size={16} />
-                登出
+                {t('profile.logout')}
               </button>
             </Card>
           ) : (
@@ -199,8 +239,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
                 <LogIn size={20} />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-semibold">登入帳號</p>
-                <p className="text-xs text-[var(--color-muted)]">登入後資料會雲端同步，換機不怕遺失</p>
+                <p className="text-sm font-semibold">{t('profile.login_prompt')}</p>
+                <p className="text-xs text-[var(--color-muted)]">{t('profile.not_logged_in_desc')}</p>
               </div>
               <ChevronRight size={18} className="text-[var(--color-muted)]" />
             </Card>
@@ -208,9 +248,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onUpdateProfi
         </section>
 
         <div className="pt-4 pb-8 text-center">
-          <p className="text-xs text-[var(--color-muted)]">纖記 Slimly v1.0.0</p>
+          <p className="text-xs text-[var(--color-muted)]">{t('profile.version_text')}</p>
           <p className="text-[10px] text-[var(--color-muted)] mt-1 opacity-60">
-            {user ? '資料已雲端同步' : '資料儲存於本地瀏覽器，登入後可雲端同步'}
+            {user ? t('profile.data_synced') : t('profile.data_local')}
           </p>
         </div>
       </main>
