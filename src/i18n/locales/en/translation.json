@@ -1,4 +1,7 @@
 {
+  "app": {
+    "title": "Slimly"
+  },
   "nav": {
     "home": "Home",
     "log": "Log",
@@ -37,7 +40,15 @@
     "2": "Moderate",
     "3": "Severe"
   },
-  "weekday": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  "weekday": [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat"
+  ],
   "greeting": {
     "morning": "Good morning",
     "afternoon": "Good afternoon",
@@ -82,10 +93,36 @@
     "today_site": "Site: {{site}}"
   },
   "weight": {
-    "title": "Weight Tracking"
+    "title": "Weight Tracking",
+    "log_weight": "Log weight",
+    "total_lost": "Total loss",
+    "to_goal": "To goal",
+    "goal_label": "Goal: {{value}}kg",
+    "set_goal": "Set goal",
+    "log_today": "Log today's weight",
+    "change": "Weight change",
+    "history": "History",
+    "empty": "No weight records yet — take the first step",
+    "waist_label": "Waist: {{value}}cm"
   },
   "nutrition": {
-    "title": "Nutrition Log"
+    "title": "Nutrition Log",
+    "today": "Today's nutrition",
+    "photo_mode": "Photo log",
+    "common_mode": "Common foods",
+    "today_summary": "Today's nutrition",
+    "protein_goal": "/ {{grams}}g protein",
+    "calories": "Calories",
+    "carbs": "Carbs",
+    "fat": "Fat",
+    "photo_action": "Photo scan",
+    "free_used_up": "Used up",
+    "today_records": "Today's records",
+    "ai_tag": "AI",
+    "empty": "No nutrition records today yet",
+    "protein_daily_goal": "Protein goal: {{grams}}g / day",
+    "confirm_delete": "Delete this record?",
+    "photo_upgrade_feature": "AI photo scan (today's {{limit}} free uses reached)"
   },
   "profile": {
     "title": "Settings",

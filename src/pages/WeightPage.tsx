@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Header } from '../components/layout/Header'
 import { WeightChart } from '../components/weight/WeightChart'
 import { WeightForm } from '../components/weight/WeightForm'
@@ -17,6 +18,7 @@ interface WeightPageProps {
 }
 
 export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog, onRemoveLog }) => {
+  const { t } = useTranslation()
   const [isAdding, setIsAdding] = useState(false)
 
   const sortedLogs = [...logs].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -31,7 +33,7 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog,
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
-      <Header title={isAdding ? '記錄體重' : '體重趨勢'} />
+      <Header title={isAdding ? t('weight.log_weight') : t('weight.title')} />
 
       <main className="p-4 space-y-6">
         {isAdding ? (
@@ -45,7 +47,7 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog,
             {/* Stats Cards */}
             <div className="grid grid-cols-2 gap-3">
               <Card variant="sage" className="flex flex-col items-center justify-center py-6">
-                <p className="text-[var(--color-muted)] text-xs mb-1">累計減輕</p>
+                <p className="text-[var(--color-muted)] text-xs mb-1">{t('weight.total_lost')}</p>
                 <div className="flex items-baseline gap-1">
                   <span className="stat-number text-3xl text-[var(--color-sage)]">{weightDiff.toFixed(1)}</span>
                   <span className="text-sm font-medium text-[var(--color-muted)]">kg</span>
@@ -53,7 +55,7 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog,
                 <Badge variant="sage" className="mt-2">-{percentDiff.toFixed(1)}%</Badge>
               </Card>
               <Card variant="rose" className="flex flex-col items-center justify-center py-6">
-                <p className="text-[var(--color-muted)] text-xs mb-1">距離目標</p>
+                <p className="text-[var(--color-muted)] text-xs mb-1">{t('weight.to_goal')}</p>
                 {profile.targetWeight ? (
                   <>
                     <div className="flex items-baseline gap-1">
@@ -62,10 +64,10 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog,
                       </span>
                       <span className="text-sm font-medium text-[var(--color-muted)]">kg</span>
                     </div>
-                    <p className="text-[10px] text-[var(--color-muted)] mt-2">目標: {profile.targetWeight}kg</p>
+                    <p className="text-[10px] text-[var(--color-muted)] mt-2">{t('weight.goal_label', { value: profile.targetWeight })}</p>
                   </>
                 ) : (
-                  <button className="text-sm text-[var(--color-sage)] font-medium">設定目標</button>
+                  <button className="text-sm text-[var(--color-sage)] font-medium">{t('weight.set_goal')}</button>
                 )}
               </Card>
             </div>
@@ -76,13 +78,13 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog,
               onClick={() => setIsAdding(true)}
             >
               <Plus size={24} />
-              記錄今日體重
+              {t('weight.log_today')}
             </Button>
 
             {/* Chart */}
             <Card className="p-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-serif text-lg">體重變化</h3>
+                <h3 className="font-serif text-lg">{t('weight.change')}</h3>
                 <TrendingDown size={18} className="text-[var(--color-sage)]" />
               </div>
               <WeightChart logs={logs} />
@@ -90,10 +92,10 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog,
 
             {/* History List */}
             <section>
-              <h3 className="font-serif text-[var(--color-muted)] text-sm mb-3 px-1">歷史記錄</h3>
+              <h3 className="font-serif text-[var(--color-muted)] text-sm mb-3 px-1">{t('weight.history')}</h3>
               {sortedLogs.length === 0 ? (
                 <Card className="text-center py-8 text-[var(--color-muted)]">
-                  還沒有體重記錄，踏出第一步吧
+                  {t('weight.empty')}
                 </Card>
               ) : (
                 <div className="space-y-2">
@@ -101,7 +103,7 @@ export const WeightPage: React.FC<WeightPageProps> = ({ logs, profile, onAddLog,
                     <div key={log.id} className="flex justify-between items-center card-monet p-4">
                       <div>
                         <p className="font-semibold">{format(parseISO(log.date), 'MM/dd')}</p>
-                        {log.waist && <p className="text-xs text-[var(--color-muted)]">腰圍: {log.waist}cm</p>}
+                        {log.waist && <p className="text-xs text-[var(--color-muted)]">{t('weight.waist_label', { value: log.waist })}</p>}
                       </div>
                       <div className="flex items-center gap-3">
                         <p className="stat-number text-lg">{log.weight} <span className="text-xs font-normal text-[var(--color-muted)]">kg</span></p>

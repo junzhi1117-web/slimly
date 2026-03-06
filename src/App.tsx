@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { HomePage } from './pages/HomePage'
 import { LogPage } from './pages/LogPage'
 import { WeightPage } from './pages/WeightPage'
@@ -18,6 +19,7 @@ migrateLegacyData()
 
 function App() {
   const [activeTab, setActiveTab] = useState('home')
+  const { i18n, t } = useTranslation()
   const [onboarded, setOnboarded] = useLocalStorage('slimly_onboarded', false)
 
   const { user } = useAuth()
@@ -27,6 +29,10 @@ function App() {
   const { records: doseRecords, addRecord, removeRecord } = useDoseRecords(user, refreshKey)
   const { logs: weightLogs, addLog: addWeightLog, removeLog: removeWeightLog } = useWeightLogs(user, refreshKey)
   const { entries: nutritionEntries, addEntry: addNutritionEntry, removeEntry: removeNutritionEntry } = useNutritionLogs(user, refreshKey)
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.resolvedLanguage ?? 'zh-TW'
+  }, [i18n.resolvedLanguage])
 
   // Handle OAuth callback: if user signed in via Google and has a profile, auto-complete onboarding
   useEffect(() => {
@@ -80,7 +86,7 @@ function App() {
       case 'home':
         return (
           <div className="p-4">
-            <Header title="纖記" />
+            <Header title={t('app.title')} />
             <HomePage
               profile={profile}
               doseRecords={doseRecords}

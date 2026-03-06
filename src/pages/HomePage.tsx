@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Card } from '../components/ui/Card'
 import { Badge } from '../components/ui/Badge'
 import { WeightChart } from '../components/weight/WeightChart'
@@ -11,11 +12,11 @@ import { getMaintenanceMessage } from '../lib/maintenanceMessages'
 import { getSmartReminders } from '../lib/smartReminders'
 import { SmartRemindersCard } from '../components/insight/SmartRemindersCard'
 import type { DoseRecord, WeightLog, UserProfile, SideEffectEntry, NutritionEntry } from '../types'
-import { MEDICATIONS, INJECTION_SITE_LABELS } from '../lib/medications'
+import { MEDICATIONS } from '../lib/medications'
 import { computeProteinGoal, getTodayEntries, getNutritionTotals } from '../lib/nutrition'
 import { Syringe, TrendingDown, Calendar, ChevronRight, Leaf } from 'lucide-react'
 import { format, parseISO, differenceInDays } from 'date-fns'
-import { zhTW } from 'date-fns/locale'
+import { zhTW, enUS } from 'date-fns/locale'
 
 interface HomePageProps {
   profile: UserProfile
@@ -26,16 +27,17 @@ interface HomePageProps {
   onUpdateSideEffects?: (id: string, sideEffects: SideEffectEntry[]) => void
 }
 
-function getGreeting(): string {
+function getGreeting(t: (key: string) => string): string {
   const h = new Date().getHours()
-  if (h < 12) return '早安'
-  if (h < 18) return '午安'
-  return '晚安'
+  if (h < 12) return t('greeting.morning')
+  if (h < 18) return t('greeting.afternoon')
+  return t('greeting.evening')
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   profile, doseRecords, weightLogs, nutritionEntries, onAction, onUpdateSideEffects
 }) => {
+  const { t, i18n } = useTranslation()
   const [dismissedId, setDismissedId] = useState<string | null>(null)
   const [timelineDismissed, setTimelineDismissed] = useState(false)
 
@@ -93,6 +95,8 @@ export const HomePage: React.FC<HomePageProps> = ({
     ? differenceInDays(new Date(), parseISO(profile.maintenanceStartDate))
     : 0
 
+  const locale = i18n.resolvedLanguage === 'en' ? enUS : zhTW
+
   // ── Maintenance Mode View ─────────────────────────────────────────────────
   if (isMaintenanceMode) {
     return (
@@ -100,11 +104,11 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* Greeting */}
         <div>
           <h2 className="text-3xl font-serif italic tracking-tight text-[var(--color-deep)]">
-            {getGreeting()}
+            {getGreeting(t)}
           </h2>
           <p className="text-label text-[var(--color-muted)] mt-1 flex items-center gap-1">
             <Leaf size={13} className="text-[#24342F]" />
-            維持期第 {maintenanceDays + 1} 天
+            {t('home.maintenance_day', { count: maintenanceDays + 1 })}
           </p>
         </div>
 
@@ -112,23 +116,23 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="rounded-3xl p-5" style={{ backgroundColor: '#24342F' }}>
           <div className="flex justify-between items-start mb-4">
             <div>
-              <p className="text-white/60 text-sm mb-1">維持期進度</p>
+              <p className="text-white/60 text-sm mb-1">{t('profile.maintenance_mode')}</p>
               <h2 className="text-2xl font-semibold text-white">
-                已持續 {maintenanceDays} 天 🌱
+                {t('home.maintenance_days', { count: maintenanceDays })}
               </h2>
             </div>
             <Badge variant="sage" className="!bg-white/15 !text-white !border-transparent">
-              維持中
+              {t('home.maintenance_status')}
             </Badge>
           </div>
           <div className="flex gap-3">
             <div className="flex-1 bg-white/10 rounded-2xl p-3">
-              <p className="text-white/50 text-xs mb-1">起始體重</p>
+              <p className="text-white/50 text-xs mb-1">{t('home.maintenance_start_weight')}</p>
               <p className="stat-number text-2xl text-white">{profile.startWeight} kg</p>
             </div>
             {lastWeight && (
               <div className="flex-1 bg-white/10 rounded-2xl p-3">
-                <p className="text-white/50 text-xs mb-1">目前體重</p>
+                <p className="text-white/50 text-xs mb-1">{t('home.maintenance_current_weight')}</p>
                 <p className="stat-number text-2xl text-white">{lastWeight.weight} kg</p>
               </div>
             )}
@@ -142,7 +146,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           onClick={() => onAction('weight')}
         >
           <TrendingDown size={20} className="text-white" />
-          <span className="text-sm font-semibold text-white">記錄今日體重</span>
+          <span className="text-sm font-semibold text-white">{t('home.log_weight_today')}</span>
         </button>
 
         <SmartRemindersCard reminders={smartReminders} onAction={onAction} />
@@ -161,7 +165,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </p>
                 <details className="mt-2">
                   <summary className="text-xs text-[var(--color-sage)] cursor-pointer select-none">
-                    了解更多
+                    {t('home.see_more')}
                   </summary>
                   <p className="text-xs text-[var(--color-muted)] leading-relaxed mt-2">
                     {maintenanceMessage.expandedBody}
@@ -175,16 +179,16 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* Weight Chart */}
         <section>
           <div className="flex justify-between items-end mb-3">
-            <h3 className="text-editorial text-2xl text-[var(--color-deep)] !mb-0">體重趨勢</h3>
+            <h3 className="text-editorial text-2xl text-[var(--color-deep)] !mb-0">{t('home.weight_trend')}</h3>
             <button onClick={() => onAction('weight')} className="text-[var(--color-sage)] text-sm flex items-center">
-              完整數據 <ChevronRight size={16} />
+              {t('home.full_data')} <ChevronRight size={16} />
             </button>
           </div>
           <Card className="p-2">
             <WeightChart logs={weightLogs.slice(-8)} height={180} />
             {lastWeight && (
               <div className="mt-2 text-center text-sm text-[var(--color-muted)]">
-                目前體重：<span className="stat-number text-lg text-[var(--color-deep)]">{lastWeight.weight}</span> kg
+                {t('home.current_weight_label')}：<span className="stat-number text-lg text-[var(--color-deep)]">{lastWeight.weight}</span> kg
                 {profile.startWeight > lastWeight.weight && (
                   <span className="ml-2 text-[var(--color-sage)] font-medium">
                     ↓ {(profile.startWeight - lastWeight.weight).toFixed(1)} kg
@@ -207,16 +211,16 @@ export const HomePage: React.FC<HomePageProps> = ({
               onClick={() => onAction('nutrition')}
             >
               <div className="flex justify-between items-center mb-2">
-                <p className="text-xs font-medium text-[var(--color-muted)]">今日蛋白質</p>
+                <p className="text-xs font-medium text-[var(--color-muted)]">{t('home.protein_today')}</p>
                 <ChevronRight size={14} className="text-[var(--color-muted)]" />
               </div>
               <div className="flex items-baseline gap-2 mb-2">
                 <span className="stat-number text-lg text-[var(--color-sage)]">
                   {Math.round(totals.protein)}g
                 </span>
-                <span className="text-xs text-[var(--color-muted)]">/ {goal.grams}g 目標</span>
+                <span className="text-xs text-[var(--color-muted)]">{t('home.protein_goal', { grams: goal.grams })}</span>
                 {todayNutrition.length === 0 && (
-                  <span className="text-xs text-[var(--color-muted)] ml-auto">點擊記錄飲食</span>
+                  <span className="text-xs text-[var(--color-muted)] ml-auto">{t('home.log_food_prompt')}</span>
                 )}
               </div>
               <div className="h-1 bg-[var(--color-sage-light)] rounded-full overflow-hidden">
@@ -249,30 +253,30 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* Greeting */}
       <div>
         <h2 className="text-editorial text-[72px] leading-none text-[var(--color-deep)]">
-          {getGreeting()}
+          {getGreeting(t)}
         </h2>
         <p className="text-eyebrow mt-3">
-          第 {totalDays} 天 · {format(new Date(), 'MM月dd日', { locale: zhTW })}
+          {t('home.day_label', { count: totalDays })} · {format(new Date(), t('home.date_format'), { locale })}
         </p>
       </div>
 
       {/* Status Card — Elegant */}
       <div className="card-elegant p-5">
-        <p className="text-eyebrow mb-3">{med.name}</p>
+        <p className="text-eyebrow mb-3">{t(`med.${profile.medicationType}`)}</p>
         <p className="stat-display text-[64px] text-[var(--color-deep)]">
           {profile.currentDose}<span className="text-3xl ml-1">{med.unit}</span>
         </p>
         <div className="divider-monet my-4" />
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-eyebrow mb-1">下次注射</p>
+            <p className="text-eyebrow mb-1">{t('home.next_injection_label')}</p>
             <p className="stat-display text-3xl text-[var(--color-deep)]">
-              {nextInjectionDays <= 0 ? '今天' : `${nextInjectionDays} 天後`}
+              {nextInjectionDays <= 0 ? t('home.next_injection_today') : t('home.next_injection_days', { count: nextInjectionDays })}
             </p>
           </div>
           <div>
-            <p className="text-eyebrow mb-1">已持續</p>
-            <p className="stat-display text-3xl text-[var(--color-deep)]">{totalDays} 天</p>
+            <p className="text-eyebrow mb-1">{t('home.duration_label')}</p>
+            <p className="stat-display text-3xl text-[var(--color-deep)]">{t('home.duration_days', { count: totalDays })}</p>
           </div>
         </div>
       </div>
@@ -284,14 +288,14 @@ export const HomePage: React.FC<HomePageProps> = ({
           onClick={() => onAction('log')}
         >
           <Syringe size={20} className="mb-3 text-[var(--color-deep)] group-active:text-white" />
-          <span className="text-sm font-medium tracking-wide text-[var(--color-deep)] group-active:!text-white">記錄注射</span>
+          <span className="text-sm font-medium tracking-wide text-[var(--color-deep)] group-active:!text-white">{t('home.log_injection')}</span>
         </button>
         <button
           className="flex flex-col items-start justify-end p-4 min-h-[96px] rounded-2xl border border-[var(--color-sage)] bg-transparent transition-all active:bg-[var(--color-sage)] active:text-white group"
           onClick={() => onAction('weight')}
         >
           <TrendingDown size={20} className="mb-3 text-[var(--color-sage)] group-active:text-white" />
-          <span className="text-sm font-medium tracking-wide text-[var(--color-sage)] group-active:!text-white">記錄體重</span>
+          <span className="text-sm font-medium tracking-wide text-[var(--color-sage)] group-active:!text-white">{t('home.log_weight')}</span>
         </button>
       </div>
 
@@ -306,16 +310,16 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* Weight Chart Preview */}
       <section>
         <div className="flex justify-between items-end mb-3">
-          <h3 className="text-editorial text-2xl text-[var(--color-deep)] !mb-0">體重趨勢</h3>
+          <h3 className="text-editorial text-2xl text-[var(--color-deep)] !mb-0">{t('home.weight_trend')}</h3>
           <button onClick={() => onAction('weight')} className="text-[var(--color-sage)] text-sm flex items-center">
-            完整數據 <ChevronRight size={16} />
+            {t('home.full_data')} <ChevronRight size={16} />
           </button>
         </div>
         <Card className="p-2">
           <WeightChart logs={weightLogs.slice(-8)} height={180} />
           {lastWeight && (
             <div className="mt-2 text-center text-sm text-[var(--color-muted)]">
-              目前體重：<span className="stat-number text-lg text-[var(--color-deep)]">{lastWeight.weight}</span> kg
+              {t('home.current_weight_label')}：<span className="stat-number text-lg text-[var(--color-deep)]">{lastWeight.weight}</span> kg
               {profile.startWeight > lastWeight.weight && (
                 <span className="ml-2 text-[var(--color-sage)] font-medium">
                   ↓ {(profile.startWeight - lastWeight.weight).toFixed(1)} kg
@@ -338,16 +342,16 @@ export const HomePage: React.FC<HomePageProps> = ({
             onClick={() => onAction('nutrition')}
           >
             <div className="flex justify-between items-center mb-2">
-              <p className="text-xs font-medium text-[var(--color-muted)]">今日蛋白質</p>
+              <p className="text-xs font-medium text-[var(--color-muted)]">{t('home.protein_today')}</p>
               <ChevronRight size={14} className="text-[var(--color-muted)]" />
             </div>
             <div className="flex items-baseline gap-2 mb-2">
               <span className="stat-display text-3xl text-[var(--color-sage)]">
                 {Math.round(totals.protein)}g
               </span>
-              <span className="text-xs text-[var(--color-muted)]">/ {goal.grams}g 目標</span>
+              <span className="text-xs text-[var(--color-muted)]">{t('home.protein_goal', { grams: goal.grams })}</span>
               {todayNutrition.length === 0 && (
-                <span className="text-xs text-[var(--color-muted)] ml-auto">點擊記錄飲食</span>
+                <span className="text-xs text-[var(--color-muted)] ml-auto">{t('home.log_food_prompt')}</span>
               )}
             </div>
             <div className="h-1 bg-[var(--color-sage-light)] rounded-full overflow-hidden">
@@ -366,15 +370,15 @@ export const HomePage: React.FC<HomePageProps> = ({
           className="bg-[var(--color-surface)] rounded-3xl px-4 py-3 border border-[var(--color-border)] cursor-pointer"
           onClick={() => onAction('log')}
         >
-          <p className="text-xs font-medium text-[var(--color-muted)] mb-2">副作用觀察</p>
+          <p className="text-xs font-medium text-[var(--color-muted)] mb-2">{t('home.side_effect_observation')}</p>
           <SideEffectInsightCard doseRecords={doseRecords} />
-          <p className="text-[10px] text-[var(--color-sage)] mt-2 text-right">查看注射日記 →</p>
+          <p className="text-[10px] text-[var(--color-sage)] mt-2 text-right">{t('home.view_injection_diary')}</p>
         </div>
       )}
 
       {/* Last Injection Preview */}
       <section>
-        <h3 className="section-title">最近一次注射</h3>
+        <h3 className="section-title">{t('home.last_injection')}</h3>
         {lastInjection ? (
           <Card>
             <div className="flex gap-4">
@@ -382,16 +386,16 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <Calendar size={24} />
               </div>
               <div>
-                <p className="font-semibold">{format(parseISO(lastInjection.date), 'yyyy/MM/dd (eee)', { locale: zhTW })}</p>
+                <p className="font-semibold">{format(parseISO(lastInjection.date), 'yyyy/MM/dd (eee)', { locale })}</p>
                 <p className="text-sm text-[var(--color-muted)]">
-                  {INJECTION_SITE_LABELS[lastInjection.injectionSite!]} · {lastInjection.dose}{med.unit}
+                  {t(`injection_site.${lastInjection.injectionSite}`)} · {lastInjection.dose}{med.unit}
                 </p>
               </div>
             </div>
           </Card>
         ) : (
           <Card className="text-center py-8 text-[var(--color-muted)]">
-            還沒有記錄，今天是個好的開始
+            {t('home.no_records')}
           </Card>
         )}
       </section>

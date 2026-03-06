@@ -1,4 +1,7 @@
 {
+  "app": {
+    "title": "纖記"
+  },
   "nav": {
     "home": "首頁",
     "log": "日記",
@@ -37,7 +40,15 @@
     "2": "中等",
     "3": "嚴重"
   },
-  "weekday": ["日", "一", "二", "三", "四", "五", "六"],
+  "weekday": [
+    "日",
+    "一",
+    "二",
+    "三",
+    "四",
+    "五",
+    "六"
+  ],
   "greeting": {
     "morning": "早安",
     "afternoon": "午安",
@@ -82,10 +93,36 @@
     "today_site": "部位：{{site}}"
   },
   "weight": {
-    "title": "體重追蹤"
+    "title": "體重追蹤",
+    "log_weight": "記錄體重",
+    "total_lost": "累計減輕",
+    "to_goal": "距離目標",
+    "goal_label": "目標: {{value}}kg",
+    "set_goal": "設定目標",
+    "log_today": "記錄今日體重",
+    "change": "體重變化",
+    "history": "歷史記錄",
+    "empty": "還沒有體重記錄，踏出第一步吧",
+    "waist_label": "腰圍: {{value}}cm"
   },
   "nutrition": {
-    "title": "飲食記錄"
+    "title": "飲食記錄",
+    "today": "今日飲食",
+    "photo_mode": "拍照記錄",
+    "common_mode": "常用食物",
+    "today_summary": "今日營養",
+    "protein_goal": "/ {{grams}}g 蛋白質",
+    "calories": "熱量",
+    "carbs": "碳水",
+    "fat": "脂肪",
+    "photo_action": "拍照辨識",
+    "free_used_up": "已用完",
+    "today_records": "今日記錄",
+    "ai_tag": "AI",
+    "empty": "今天還沒有飲食記錄",
+    "protein_daily_goal": "目標蛋白質：{{grams}}g / 天",
+    "confirm_delete": "確認刪除這筆記錄？",
+    "photo_upgrade_feature": "AI 拍照辨識（今日 {{limit}} 次免費已用完）"
   },
   "profile": {
     "title": "我的設定",

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Header } from '../components/layout/Header'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
@@ -25,6 +26,7 @@ interface NutritionPageProps {
 export const NutritionPage: React.FC<NutritionPageProps> = ({
   entries, profile, weightLogs, onAddEntry, onRemoveEntry
 }) => {
+  const { t } = useTranslation()
   const [mode, setMode] = useState<InputMode>('idle')
   const [aiResult, setAiResult] = useState<AiFoodAnalysis | null>(null)
   const [showUpgrade, setShowUpgrade] = useState(false)
@@ -87,7 +89,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
       <Header
-        title={mode !== 'idle' ? (mode === 'photo' ? '拍照記錄' : '常用食物') : '今日飲食'}
+        title={mode !== 'idle' ? (mode === 'photo' ? t('nutrition.photo_mode') : t('nutrition.common_mode')) : t('nutrition.today')}
         onBack={mode !== 'idle' ? () => { setMode('idle'); setAiResult(null) } : undefined}
       />
       <main className="p-4 space-y-4">
@@ -95,13 +97,13 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
         {/* 今日摘要卡 */}
         {mode === 'idle' && (
           <div className="card-elegant p-5">
-            <p className="text-eyebrow mb-4">今日營養</p>
+            <p className="text-eyebrow mb-4">{t('nutrition.today_summary')}</p>
             {/* 蛋白質主角 */}
             <div className="mb-4">
               <div className="flex items-baseline gap-2 mb-2">
                 <span className="stat-display text-5xl text-[var(--color-deep)]">{Math.round(totals.protein)}</span>
                 <span className="text-[var(--color-muted)] text-base">g</span>
-                <span className="text-xs text-[var(--color-muted)] ml-1">/ {proteinGoal.grams}g 蛋白質</span>
+                <span className="text-xs text-[var(--color-muted)] ml-1">{t('nutrition.protein_goal', { grams: proteinGoal.grams })}</span>
                 <span className="ml-auto text-sm font-medium text-[var(--color-sage)]">
                   {Math.min(100, Math.round(totals.protein / proteinGoal.grams * 100))}%
                 </span>
@@ -115,9 +117,9 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
             {/* 其他三項 */}
             <div className="grid grid-cols-3 gap-3">
               {[
-                { label: '熱量', value: Math.round(totals.calories), unit: 'kcal' },
-                { label: '碳水', value: Math.round(totals.carbs), unit: 'g' },
-                { label: '脂肪', value: Math.round(totals.fat), unit: 'g' },
+                { label: t('nutrition.calories'), value: Math.round(totals.calories), unit: 'kcal' },
+                { label: t('nutrition.carbs'), value: Math.round(totals.carbs), unit: 'g' },
+                { label: t('nutrition.fat'), value: Math.round(totals.fat), unit: 'g' },
               ].map(item => (
                 <div key={item.label}>
                   <p className="text-eyebrow mb-1">{item.label}</p>
@@ -139,7 +141,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
                 onClick={() => canUsePhoto ? setMode('photo') : setShowUpgrade(true)}
               >
                 <Camera size={20} />
-                拍照辨識
+                {t('nutrition.photo_action')}
               </Button>
               {/* 次數標籤 */}
               {!isPremium && (
@@ -151,7 +153,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
                   {canUsePhoto ? (
                     <>{usageCount}/{DAILY_FREE_LIMIT}</>
                   ) : (
-                    <><Lock size={8} /> 已用完</>
+                    <><Lock size={8} /> {t('nutrition.free_used_up')}</>
                   )}
                 </div>
               )}
@@ -163,7 +165,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
               onClick={() => setMode('common')}
             >
               <List size={20} />
-              常用食物
+              {t('nutrition.common_mode')}
             </Button>
           </div>
         )}
@@ -190,7 +192,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
         {/* 今日記錄列表 */}
         {mode === 'idle' && todayEntries.length > 0 && (
           <section>
-            <h3 className="font-serif text-lg text-[var(--color-deep)] mb-3">今日記錄</h3>
+            <h3 className="font-serif text-lg text-[var(--color-deep)] mb-3">{t('nutrition.today_records')}</h3>
             <div className="space-y-2">
               {todayEntries.map(entry => (
                 <Card key={entry.id} className="p-3">
@@ -202,7 +204,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
                         </p>
                         {entry.source === 'ai_photo' && (
                           <span className="text-[10px] bg-[var(--color-sage-light)] text-[var(--color-sage)] px-1.5 py-0.5 rounded-full shrink-0">
-                            AI
+                            {t('nutrition.ai_tag')}
                           </span>
                         )}
                       </div>
@@ -231,9 +233,9 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
         {mode === 'idle' && todayEntries.length === 0 && (
           <Card className="text-center py-10">
             <UtensilsCrossed size={32} className="text-[var(--color-muted)] mx-auto mb-3" />
-            <p className="text-[var(--color-muted)] text-sm">今天還沒有飲食記錄</p>
+            <p className="text-[var(--color-muted)] text-sm">{t('nutrition.empty')}</p>
             <p className="text-xs text-[var(--color-muted)] mt-1">
-              目標蛋白質：{proteinGoal.grams}g / 天
+              {t('nutrition.protein_daily_goal', { grams: proteinGoal.grams })}
             </p>
           </Card>
         )}
@@ -245,14 +247,14 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
         <div className="fixed inset-0 z-50 flex items-end">
           <div className="absolute inset-0 bg-black/20" onClick={() => setConfirmDeleteId(null)} />
           <div className="relative w-full bg-[var(--color-surface)] rounded-t-3xl p-6 pb-8 space-y-3">
-            <p className="text-center font-medium text-[var(--color-deep)]">確認刪除這筆記錄？</p>
+            <p className="text-center font-medium text-[var(--color-deep)]">{t('nutrition.confirm_delete')}</p>
             <button className="w-full py-3 rounded-2xl bg-[var(--color-rose-light)] text-[var(--color-rose)] font-semibold"
               onClick={() => { onRemoveEntry(confirmDeleteId); setConfirmDeleteId(null) }}>
-              刪除
+              {t('common.delete')}
             </button>
             <button className="w-full py-3 rounded-2xl text-[var(--color-muted)]"
               onClick={() => setConfirmDeleteId(null)}>
-              取消
+              {t('common.cancel')}
             </button>
           </div>
         </div>
@@ -261,7 +263,7 @@ export const NutritionPage: React.FC<NutritionPageProps> = ({
       {/* Premium 升級 Modal */}
       {showUpgrade && (
         <UpgradeModal
-          featureName={`AI 拍照辨識（今日 ${DAILY_FREE_LIMIT} 次免費已用完）`}
+          featureName={t('nutrition.photo_upgrade_feature', { limit: DAILY_FREE_LIMIT })}
           onClose={() => setShowUpgrade(false)}
         />
       )}
