@@ -21,6 +21,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('home')
   const { i18n, t } = useTranslation()
   const [onboarded, setOnboarded] = useLocalStorage('slimly_onboarded', false)
+  const [isCheckingAccount, setIsCheckingAccount] = useState(true)
 
   const { user } = useAuth()
   const [refreshKey, setRefreshKey] = useState(0)
@@ -34,26 +35,53 @@ function App() {
     document.documentElement.lang = i18n.resolvedLanguage ?? 'zh-TW'
   }, [i18n.resolvedLanguage])
 
-  // Handle OAuth callback: if user signed in via Google and has a profile, auto-complete onboarding
+  // Handle OAuth callback and initial load: check if user is already onboarded on Supabase
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user && !onboarded) {
-        // Check if this user already has a profile in Supabase
+    let mounted = true
+
+    const checkSessionAndProfile = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (session?.user && !onboarded) {
         const { data: existingProfile } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', session.user.id)
           .single()
 
-        if (existingProfile && existingProfile.start_weight) {
+        if (existingProfile && existingProfile.start_weight && mounted) {
+          setOnboarded(true)
+          setRefreshKey(k => k + 1)
+        }
+      }
+      if (mounted) {
+        setIsCheckingAccount(false)
+      }
+    }
+
+    checkSessionAndProfile()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user && !onboarded) {
+        if (mounted) setIsCheckingAccount(true)
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
+
+        if (existingProfile && existingProfile.start_weight && mounted) {
           // Returning user — mark onboarded and skip onboarding
           setOnboarded(true)
           setRefreshKey(k => k + 1)
         }
-        // If no complete profile, they'll continue onboarding (step 4 handler will save it)
+        if (mounted) setIsCheckingAccount(false)
       }
     })
-    return () => subscription.unsubscribe()
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
   }, [onboarded, setOnboarded])
 
   const handleOnboardingComplete = useCallback((newProfile: UserProfile) => {
@@ -68,6 +96,11 @@ function App() {
       setRefreshKey(k => k + 1)
     }
   }, [user])
+
+  if (isCheckingAccount && !onboarded) {
+    // Show a blank loading screen while we determine if they need onboarding
+    return <div className="min-h-screen bg-[var(--color-bg)]" />
+  }
 
   if (!onboarded) {
     return <OnboardingPage onComplete={handleOnboardingComplete} />

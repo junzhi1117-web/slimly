@@ -43,11 +43,24 @@ export const InjectionList: React.FC<InjectionListProps> = ({ logs, onRemove }) 
 
                 {log.sideEffects && log.sideEffects.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">
-                    {log.sideEffects.map(se => (
-                      <Badge key={se.type} variant="rose" className="text-[10px]">
-                        {SIDE_EFFECT_LABELS[se.type]} {se.severity === 3 ? '!!!' : se.severity === 2 ? '!!' : '!'}
-                      </Badge>
-                    ))}
+                    {log.sideEffects.map((se: unknown, idx: number) => {
+                      if (typeof se === 'string') {
+                        // 處理舊版資料結構（單純字串陣列）
+                        const typeKey = se as import('../../types').SideEffectType
+                        return (
+                          <Badge key={`${log.id}-${se}-${idx}`} variant="rose" className="text-[10px]">
+                            {SIDE_EFFECT_LABELS[typeKey] || se}
+                          </Badge>
+                        )
+                      }
+                      // 處理新版資料結構（物件帶有 type 與 severity）
+                      const entry = se as import('../../types').SideEffectEntry
+                      return (
+                        <Badge key={`${log.id}-${entry.type}`} variant="rose" className="text-[10px]">
+                          {SIDE_EFFECT_LABELS[entry.type]} {entry.severity === 3 ? '!!!' : entry.severity === 2 ? '!!' : '!'}
+                        </Badge>
+                      )
+                    })}
                   </div>
                 )}
 

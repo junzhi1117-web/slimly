@@ -39,7 +39,7 @@ export const SmartRemindersCard: React.FC<SmartRemindersCardProps> = ({ reminder
   return (
     <section>
       <div className="flex items-center justify-between mb-2 px-1">
-        <h3 className="text-sm font-semibold text-[var(--color-deep)]">智慧提醒</h3>
+        <h3 className="text-sm font-medium text-[var(--color-deep)]">智慧提醒</h3>
         <span className="text-[10px] text-[var(--color-muted)]">P1</span>
       </div>
 
@@ -58,7 +58,7 @@ export const SmartRemindersCard: React.FC<SmartRemindersCardProps> = ({ reminder
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1 mb-1">
                     <Icon size={14} className={cfg.text} />
-                    <p className="text-sm font-semibold text-[var(--color-deep)]">{reminder.title}</p>
+                    <p className="text-sm font-medium text-[var(--color-deep)]">{reminder.title}</p>
                   </div>
                   <p className="text-xs leading-relaxed text-[var(--color-muted)]">{reminder.body}</p>
 

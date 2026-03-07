@@ -252,7 +252,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
       {/* Greeting */}
       <div>
-        <h2 className="text-editorial text-[72px] leading-none text-[var(--color-deep)]">
+        <h2 className="text-editorial text-6xl leading-none text-[var(--color-deep)]">
           {getGreeting(t)}
         </h2>
         <p className="text-eyebrow mt-3">

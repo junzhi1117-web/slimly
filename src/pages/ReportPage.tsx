@@ -377,7 +377,7 @@ export const ReportPage: React.FC<ReportPageProps> = ({ profile, doseRecords, we
               </div>
             ) : (
               <div style={{ width: '100%', height: 240 }}>
-                <ResponsiveContainer>
+                <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                   <LineChart data={visibleWeightTrend} margin={{ top: 8, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                     <XAxis dataKey="displayDate" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: chartTheme.muted }} />
@@ -411,7 +411,7 @@ export const ReportPage: React.FC<ReportPageProps> = ({ profile, doseRecords, we
               </div>
             ) : (
               <div style={{ width: '100%', height: 220 }}>
-                <ResponsiveContainer>
+                <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                   <LineChart data={doseTimeline} margin={{ top: 8, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                     <XAxis dataKey="displayDate" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: chartTheme.muted }} />
@@ -443,7 +443,7 @@ export const ReportPage: React.FC<ReportPageProps> = ({ profile, doseRecords, we
               </div>
             ) : (
               <div style={{ width: '100%', height: 230 }}>
-                <ResponsiveContainer>
+                <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                   <BarChart data={sideEffectRows} margin={{ top: 8, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: chartTheme.muted }} />

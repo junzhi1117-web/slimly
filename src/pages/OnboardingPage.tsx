@@ -148,7 +148,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
         >
           {/* Step 1 — 選藥物 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
-            <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
+            <h1 className="text-editorial text-4xl text-[var(--color-deep)] mb-2">
               {t('onboarding.step1_title')}
             </h1>
             <p className="text-eyebrow mt-3 mb-8">
@@ -192,7 +192,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
 
           {/* Step 2 — 劑量與時間 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
-            <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
+            <h1 className="text-editorial text-4xl text-[var(--color-deep)] mb-2">
               {t('onboarding.step2_title')}
             </h1>
             <p className="text-eyebrow mt-3 mb-8">
@@ -269,7 +269,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
 
           {/* Step 3 — 體重目標 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
-            <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
+            <h1 className="text-editorial text-4xl text-[var(--color-deep)] mb-2">
               {t('onboarding.step3_title')}
             </h1>
             <p className="text-eyebrow mt-3 mb-8">
@@ -323,7 +323,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({ onComplete }) =>
 
           {/* Step 4 — 建立帳號 */}
           <div className="w-screen shrink-0 px-5 overflow-y-auto">
-            <h1 className="text-editorial text-5xl text-[var(--color-deep)] mb-2">
+            <h1 className="text-editorial text-4xl text-[var(--color-deep)] mb-2">
               {t('onboarding.step4_title')}
             </h1>
             <p className="text-eyebrow mt-3 mb-8">

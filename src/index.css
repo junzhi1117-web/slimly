@@ -21,6 +21,7 @@
   background-color: var(--color-bg);
   color: var(--color-deep);
   font-family: var(--font-sans);
+  font-weight: 300;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "kern" 1, "liga" 1;
@@ -105,12 +106,12 @@ input, button, select, textarea {
   font-family: var(--font-serif), var(--font-sans);
   font-size: 1.15em;
   letter-spacing: -0.02em;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .text-display {
   font-family: var(--font-serif), var(--font-sans);
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.01em;
   line-height: 1.2;
 }
@@ -125,10 +126,10 @@ input, button, select, textarea {
 
 .section-title {
   font-family: "Noto Serif TC", serif;
-  font-weight: 900;
+  font-weight: 500;
   font-style: normal;
   font-size: 1.1rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   color: var(--color-deep);
   margin-bottom: 0.75rem;
 }
@@ -144,7 +145,7 @@ input, button, select, textarea {
   border-radius: 16px;
   background-color: var(--color-deep);
   color: white;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.95rem;
   transition: opacity 0.15s ease, transform 0.1s ease;
 }
@@ -167,7 +168,7 @@ input, button, select, textarea {
   border-radius: 16px;
   background-color: var(--color-sage-light);
   color: var(--color-deep);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.95rem;
   transition: opacity 0.15s ease, transform 0.1s ease;
 }
@@ -213,9 +214,9 @@ input, button, select, textarea {
 
 .text-editorial {
   font-family: "Noto Serif TC", serif;
-  font-weight: 900;
+  font-weight: 300;
   font-style: normal;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 1.05;
 }
 

@@ -39,7 +39,7 @@ export const FoodNoiseTrendChart: React.FC<FoodNoiseTrendChartProps> = ({ logs, 
         </p>
       )}
       <div style={{ width: '100%', height }}>
-        <ResponsiveContainer>
+        <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
           <LineChart data={data} margin={{ top: 8, right: 8, left: -28, bottom: 0 }}>
             <XAxis
               dataKey="displayDate"
